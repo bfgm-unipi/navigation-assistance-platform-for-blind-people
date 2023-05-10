@@ -17,6 +17,7 @@ package com.google.ar.core.examples.kotlin.helloar
 
 import android.content.Context
 import android.media.AudioAttributes
+import android.os.Build
 import android.os.Bundle
 import android.os.VibrationAttributes
 import android.os.VibrationEffect
@@ -26,6 +27,7 @@ import android.widget.Toast
 import android.os.Vibrator
 import android.view.View
 import android.widget.Button
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import com.google.ar.core.Config
 import com.google.ar.core.Session
@@ -171,18 +173,19 @@ class HelloArActivity : AppCompatActivity(), View.OnClickListener {
     }
 
     /* ------------------ GIANLUCA --------------- */
-
-    fun startVibration(duration: Long) {
+    @RequiresApi(Build.VERSION_CODES.O)
+    fun startVibration(vibration_duration: Long, waiting_duration: Long, amplitude: Int) {
 
         // create a vibrator object
         val vibrator = getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
 
-        // start vibration for 'duration' milliseconds
-        vibrator.vibrate(longArrayOf(0L, duration), -1)
+        // start vibration for 'duration' milliseconds and 'amplitude' (between 1 and 255)
+        vibrator.vibrate(VibrationEffect.createWaveform(longArrayOf(vibration_duration, waiting_duration), intArrayOf(amplitude, 0), 0))
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onClick(p0: View?) {
-        startVibration(500L)
+        startVibration(500L, 100L, 255)
     }
 
     /* ------------------------------------------- */
