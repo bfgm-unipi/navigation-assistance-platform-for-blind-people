@@ -353,7 +353,7 @@ class HelloArRenderer(val activity: HelloArActivity) :
         trackingStateHelper.updateKeepScreenOnFlag(camera.trackingState)
 
         // Draw background
-        if (frame.timestamp != 0L) {
+        if (frame.timestamp != 0L && activity.depthSettings.drawCameraBackgroundEnabled()) {
             // Suppress rendering if the camera did not produce the first frame yet. This is to avoid
             // drawing possible leftover data from previous sessions if the texture is reused.
             backgroundRenderer.drawBackground(render)
