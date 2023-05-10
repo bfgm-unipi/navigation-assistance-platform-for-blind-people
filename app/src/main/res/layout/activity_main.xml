@@ -1,0 +1,121 @@
+<!--
+   Copyright 2021 Google LLC
+
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+-->
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/my_layout"
+    tools:context="com.google.ar.core.examples.java.helloar.HelloArActivity">
+
+  <android.opengl.GLSurfaceView
+      android:id="@+id/surfaceview"
+      android:layout_width="fill_parent"
+      android:layout_height="fill_parent"
+      android:layout_gravity="top"/>
+
+  <ImageButton
+      android:id="@+id/settings_button"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_alignParentEnd="true"
+      android:layout_alignParentTop="true"
+      android:layout_margin="25dp"
+      android:src="@drawable/ic_settings"
+      android:background="@android:color/transparent"/>
+
+  <TextView
+      android:id="@+id/c_d"
+      android:layout_width="150dp"
+      android:layout_height="20dp"
+      android:text="Center: 0.0m"
+      android:textSize="15sp" />
+
+  <TextView
+      android:id="@+id/a_l_d"
+      android:layout_width="150dp"
+      android:layout_height="20dp"
+      android:layout_marginTop="30dp"
+      android:text="Arm Left: 0.0m"
+      android:textSize="15sp" />
+
+  <TextView
+      android:id="@+id/l_l_d"
+      android:layout_width="150dp"
+      android:layout_height="20dp"
+      android:layout_marginTop="60dp"
+      android:text="Leg Left: 0.0m"
+      android:textSize="15sp" />
+
+  <TextView
+      android:id="@+id/l_r_d"
+      android:layout_width="150dp"
+      android:layout_height="20dp"
+      android:layout_marginLeft="160dp"
+      android:layout_marginTop="60dp"
+      android:text="Leg Right: 0.0m"
+      android:textSize="15sp" />
+
+  <TextView
+      android:id="@+id/a_r_d"
+      android:layout_width="150dp"
+      android:layout_height="20dp"
+      android:layout_marginLeft="160dp"
+      android:layout_marginTop="30dp"
+      android:text="Arm Right: 0.0m"
+      android:textSize="15sp" />
+
+  <TextView
+      android:id="@+id/h_d"
+      android:layout_width="150dp"
+      android:layout_height="20dp"
+      android:layout_marginLeft="160dp"
+      android:text="Head: 0.0m"
+      android:textSize="15sp" />
+
+  <TextView
+      android:id="@+id/c_p"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:text="C" />
+  <TextView
+      android:id="@+id/h_p"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:text="H" />
+  <TextView
+      android:id="@+id/a_l_p"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:text="LA" />
+  <TextView
+      android:id="@+id/a_r_p"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:text="RA" />
+  <TextView
+      android:id="@+id/l_l_p"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:text="LL" />
+  <TextView
+      android:id="@+id/l_r_p"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:text="RL" />
+
+
+
+</RelativeLayout>
