@@ -90,6 +90,8 @@ class HelloArRenderer(val activity: HelloArActivity) :
     lateinit var planeRenderer: PlaneRenderer
     lateinit var backgroundRenderer: BackgroundRenderer
     lateinit var virtualSceneFramebuffer: Framebuffer
+    lateinit var pointsCoordinates: DetectionPointsCoordinates
+
     var hasSetTextureNames = false
 
     // Point Cloud
@@ -318,27 +320,18 @@ class HelloArRenderer(val activity: HelloArActivity) :
                 val width: Int = depthImage.width
                 val height: Int = depthImage.height
 
-                val level_height_1: Float = 1/4.0f
-                val level_height_2: Float = 1/2.0f
-                val level_height_3: Float = 3/4.0f
-
-                val level_width_1: Float = 1/2.0f
-                val level_width_2_1: Float = 1/3.0f
-                val level_width_2_2: Float = 2/3.0f
-
-
-                val center_distance = getMillimetersDepth(depthImage, level_width_1, level_height_2)
-                this.activity.printDistance("c_d", "c_p", center_distance / 1000.0f, level_width_1, level_height_2)
-                val head_distance = getMillimetersDepth(depthImage, level_width_1, level_height_1)
-                this.activity.printDistance("h_d", "h_p", head_distance / 1000.0f, level_width_1, level_height_1)
-                val left_arm_distance = getMillimetersDepth(depthImage, level_width_2_1, level_height_2)
-                this.activity.printDistance("a_l_d", "a_l_p", left_arm_distance / 1000.0f, level_width_2_1, level_height_2)
-                val right_arm_distance = getMillimetersDepth(depthImage, level_width_2_2, level_height_2)
-                this.activity.printDistance("a_r_d", "a_r_p", right_arm_distance / 1000.0f, level_width_2_2 , level_height_2)
-                val left_leg_distance = getMillimetersDepth(depthImage, level_width_2_1, level_height_3)
-                this.activity.printDistance("l_l_d", "l_l_p", left_leg_distance / 1000.0f, level_width_2_1 , level_height_3)
-                val right_leg_distance = getMillimetersDepth(depthImage, level_width_2_2, level_height_3)
-                this.activity.printDistance("l_r_d", "l_r_p", right_leg_distance / 1000.0f, level_width_2_2, level_height_3)
+//                val center_distance = getMillimetersDepth(depthImage, level_width_1, level_height_2)
+//                this.activity.printDistance("c_d", "c_p", center_distance / 1000.0f, level_width_1, level_height_2)
+//                val head_distance = getMillimetersDepth(depthImage, level_width_1, level_height_1)
+//                this.activity.printDistance("h_d", "h_p", head_distance / 1000.0f, level_width_1, level_height_1)
+//                val left_arm_distance = getMillimetersDepth(depthImage, level_width_2_1, level_height_2)
+//                this.activity.printDistance("a_l_d", "a_l_p", left_arm_distance / 1000.0f, level_width_2_1, level_height_2)
+//                val right_arm_distance = getMillimetersDepth(depthImage, level_width_2_2, level_height_2)
+//                this.activity.printDistance("a_r_d", "a_r_p", right_arm_distance / 1000.0f, level_width_2_2 , level_height_2)
+//                val left_leg_distance = getMillimetersDepth(depthImage, level_width_2_1, level_height_3)
+//                this.activity.printDistance("l_l_d", "l_l_p", left_leg_distance / 1000.0f, level_width_2_1 , level_height_3)
+//                val right_leg_distance = getMillimetersDepth(depthImage, level_width_2_2, level_height_3)
+//                this.activity.printDistance("l_r_d", "l_r_p", right_leg_distance / 1000.0f, level_width_2_2, level_height_3)
 
                 /***********/
 
