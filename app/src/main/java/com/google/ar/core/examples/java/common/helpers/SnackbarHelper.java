@@ -45,7 +45,7 @@ public final class SnackbarHelper {
     }
   }
 
-  /** Shows a snackbar with a given message, and a dismiss button. */
+  /** Shows a snackbar with a given message, and a dismiss test_vibration. */
   public void showMessageWithDismiss(Activity activity, String message) {
     show(activity, message, DismissBehavior.SHOW);
   }

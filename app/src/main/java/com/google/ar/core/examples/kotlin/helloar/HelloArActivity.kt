@@ -16,14 +16,16 @@
 package com.google.ar.core.examples.kotlin.helloar
 
 import android.content.Context
-import android.opengl.GLSurfaceView
+import android.media.AudioAttributes
 import android.os.Bundle
-import android.util.DisplayMetrics
+import android.os.VibrationAttributes
+import android.os.VibrationEffect
 import android.util.Log
-import android.widget.RelativeLayout
 import android.widget.TextView
 import android.widget.Toast
-import android.view.WindowManager
+import android.os.Vibrator
+import android.view.View
+import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
 import com.google.ar.core.Config
 import com.google.ar.core.Session
@@ -43,7 +45,7 @@ import com.google.ar.core.exceptions.UnavailableUserDeclinedInstallationExceptio
  * ARCore API. The application will display any detected planes and will allow the user to tap on a
  * plane to place a 3D model.
  */
-class HelloArActivity : AppCompatActivity() {
+class HelloArActivity : AppCompatActivity(), View.OnClickListener {
     companion object {
         private const val TAG = "HelloArActivity"
     }
@@ -95,6 +97,13 @@ class HelloArActivity : AppCompatActivity() {
         SampleRender(view.surfaceView, renderer, assets)
 
         depthSettings.onCreate(this)
+
+        /* ------------------ GIANLUCA --------------- */
+
+        var button: Button = findViewById(R.id.button2)
+        button.setOnClickListener(this)
+
+        /* ------------------------------------------- */
     }
 
     fun printDistance(distanceId:String, pixelId: String, distance: Float, pixel_width: Float, pixel_height: Float) {
@@ -160,4 +169,21 @@ class HelloArActivity : AppCompatActivity() {
         super.onWindowFocusChanged(hasFocus)
         FullScreenHelper.setFullScreenOnWindowFocusChanged(this, hasFocus)
     }
+
+    /* ------------------ GIANLUCA --------------- */
+
+    fun startVibration(duration: Long) {
+
+        // create a vibrator object
+        val vibrator = getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
+
+        // start vibration for 'duration' milliseconds
+        vibrator.vibrate(longArrayOf(0L, duration), -1)
+    }
+
+    override fun onClick(p0: View?) {
+        startVibration(500L)
+    }
+
+    /* ------------------------------------------- */
 }
