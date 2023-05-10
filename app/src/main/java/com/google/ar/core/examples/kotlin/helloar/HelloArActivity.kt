@@ -160,7 +160,7 @@ class HelloArActivity : AppCompatActivity() {
 
     /* --------------- Matteo --------------- */
 
-    fun drawUser() {
+    fun drawUserImages() {
         // get the image view references
         val head: ImageView = findViewById(R.id.user_head)
         val leftChest: ImageView  = findViewById(R.id.user_left_chest)
@@ -192,12 +192,44 @@ class HelloArActivity : AppCompatActivity() {
         rightLeg.translationX = (screenWidth / 2.0f)
         rightLeg.translationY = leftLeg.translationY
 
-        // set the image visible
+        // set the images visible
         head.visibility = ImageView.VISIBLE
         leftChest.visibility  = ImageView.VISIBLE
         rightChest.visibility = ImageView.VISIBLE
         leftLeg.visibility  = ImageView.VISIBLE
         rightLeg.visibility = ImageView.VISIBLE
+    }
+
+    fun updateUserImages() {
+        // get the image view references
+        val head: ImageView = findViewById(R.id.user_head)
+        val leftChest: ImageView  = findViewById(R.id.user_left_chest)
+        val rightChest: ImageView = findViewById(R.id.user_right_chest)
+        val leftLeg: ImageView  = findViewById(R.id.user_left_leg)
+        val rightLeg: ImageView = findViewById(R.id.user_right_leg)
+
+        // TODO: setup the update image resources
+        head.setImageResource(R.drawable.head_red)
+        leftChest.setImageResource(R.drawable.left_chest_red)
+        rightChest.setImageResource(R.drawable.right_chest)
+        leftLeg.setImageResource(R.drawable.left_leg)
+        rightLeg.setImageResource(R.drawable.right_leg_red)
+    }
+
+    fun hideUserImages() {
+        // get the image view references
+        val head: ImageView = findViewById(R.id.user_head)
+        val leftChest: ImageView  = findViewById(R.id.user_left_chest)
+        val rightChest: ImageView = findViewById(R.id.user_right_chest)
+        val leftLeg: ImageView  = findViewById(R.id.user_left_leg)
+        val rightLeg: ImageView = findViewById(R.id.user_right_leg)
+
+        // set the images invisible
+        head.visibility = ImageView.INVISIBLE
+        leftChest.visibility  = ImageView.INVISIBLE
+        rightChest.visibility = ImageView.INVISIBLE
+        leftLeg.visibility  = ImageView.INVISIBLE
+        rightLeg.visibility = ImageView.INVISIBLE
     }
 
     /* -------------------------------------- */

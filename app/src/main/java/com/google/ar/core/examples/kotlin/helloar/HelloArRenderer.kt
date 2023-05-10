@@ -124,6 +124,10 @@ class HelloArRenderer(val activity: HelloArActivity) :
     val displayRotationHelper = DisplayRotationHelper(activity)
     val trackingStateHelper = TrackingStateHelper(activity)
 
+    /* --------------- Matteo --------------- */
+    var userImagesHidden = true
+    /* -------------------------------------- */
+
     override fun onResume(owner: LifecycleOwner) {
         displayRotationHelper.onResume()
         hasSetTextureNames = false
@@ -361,11 +365,18 @@ class HelloArRenderer(val activity: HelloArActivity) :
 
         /* --------------- Matteo --------------- */
 
-        // draw user image
+        // user images management
         if (activity.depthSettings.drawUserCollisionStateEnabled()) {
-            activity.runOnUiThread(java.lang.Runnable {
-                activity.drawUser()
-            })
+            if (userImagesHidden) {
+                userImagesHidden = false
+                activity.runOnUiThread(java.lang.Runnable { activity.drawUserImages() })
+            }
+            activity.runOnUiThread(java.lang.Runnable { activity.updateUserImages() })
+        } else {
+            if (!userImagesHidden) {
+                userImagesHidden = true
+                activity.runOnUiThread(java.lang.Runnable { activity.hideUserImages() })
+            }
         }
 
         /* -------------------------------------- */
