@@ -86,6 +86,9 @@ class HelloArRenderer(val activity: HelloArActivity) :
         val CUBEMAP_NUMBER_OF_IMPORTANCE_SAMPLES = 32
     }
 
+    /* TEST */
+    var currentStatusGrid = false
+
     lateinit var render: SampleRender
     lateinit var planeRenderer: PlaneRenderer
     lateinit var backgroundRenderer: BackgroundRenderer
@@ -335,6 +338,27 @@ class HelloArRenderer(val activity: HelloArActivity) :
 
                 /***********/
 
+                /* TEST */
+                val testPoints = mutableListOf<String>()
+                testPoints.add("h0")
+                testPoints.add("cl0")
+                testPoints.add("cr6")
+                testPoints.add("cr5")
+                testPoints.add("cr4")
+                testPoints.add("cr3")
+                testPoints.add("cr7")
+
+                if (this.currentStatusGrid) {
+                    this.activity.updateGrid(testPoints)
+                } else {
+                    // just for testing
+                    this.currentStatusGrid = true
+                    this.activity.runOnUiThread(java.lang.Runnable {
+                        this.activity.drawGrid()
+                    })
+                }
+                /*------*/
+
                 depthImage.close()
             } catch (e: NotYetAvailableException) {
                 // This normally means that depth data is not available yet. This is normal so we will not
@@ -351,6 +375,18 @@ class HelloArRenderer(val activity: HelloArActivity) :
             // drawing possible leftover data from previous sessions if the texture is reused.
             backgroundRenderer.drawBackground(render)
         }
+
+        /* ---------------- Biagio ---------------- /
+        if (activity.depthSettings.drawGridEnabled() && !this.currentStatusGrid) {
+            this.activity.runOnUiThread(java.lang.Runnable {
+                this.activity.drawGrid()
+            })
+            this.currentStatusGrid = true
+        } else if (!activity.depthSettings.drawGridEnabled() && this.currentStatusGrid) {
+            this.activity.hideGrid()
+            this.currentStatusGrid = false
+        }
+        / ---------------------------------------- */
 
         // If not tracking, don't draw 3D objects.
         if (camera.trackingState == TrackingState.PAUSED) {

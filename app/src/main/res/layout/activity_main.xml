@@ -14,6 +14,7 @@
    limitations under the License.
 -->
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -36,86 +37,165 @@
       android:src="@drawable/ic_settings"
       android:background="@android:color/transparent"/>
 
-  <TextView
-      android:id="@+id/c_d"
-      android:layout_width="150dp"
-      android:layout_height="20dp"
-      android:text="Center: 0.0m"
-      android:textSize="15sp" />
-
-  <TextView
-      android:id="@+id/a_l_d"
-      android:layout_width="150dp"
-      android:layout_height="20dp"
-      android:layout_marginTop="30dp"
-      android:text="Arm Left: 0.0m"
-      android:textSize="15sp" />
-
-  <TextView
-      android:id="@+id/l_l_d"
-      android:layout_width="150dp"
-      android:layout_height="20dp"
-      android:layout_marginTop="60dp"
-      android:text="Leg Left: 0.0m"
-      android:textSize="15sp" />
-
-  <TextView
-      android:id="@+id/l_r_d"
-      android:layout_width="150dp"
-      android:layout_height="20dp"
-      android:layout_marginLeft="160dp"
-      android:layout_marginTop="60dp"
-      android:text="Leg Right: 0.0m"
-      android:textSize="15sp" />
-
-  <TextView
-      android:id="@+id/a_r_d"
-      android:layout_width="150dp"
-      android:layout_height="20dp"
-      android:layout_marginLeft="160dp"
-      android:layout_marginTop="30dp"
-      android:text="Arm Right: 0.0m"
-      android:textSize="15sp" />
-
-  <TextView
-      android:id="@+id/h_d"
-      android:layout_width="150dp"
-      android:layout_height="20dp"
-      android:layout_marginLeft="160dp"
-      android:text="Head: 0.0m"
-      android:textSize="15sp" />
-
-  <TextView
-      android:id="@+id/c_p"
+  <ImageView
+      android:id="@+id/h0"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:text="C" />
-  <TextView
-      android:id="@+id/h_p"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:text="H" />
-  <TextView
-      android:id="@+id/a_l_p"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:text="LA" />
-  <TextView
-      android:id="@+id/a_r_p"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:text="RA" />
-  <TextView
-      android:id="@+id/l_l_p"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:text="LL" />
-  <TextView
-      android:id="@+id/l_r_p"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:text="RL" />
+      android:src="@android:drawable/presence_invisible"
+      android:visibility="invisible" />
 
+  <ImageView
+      android:id="@+id/h1"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:src="@android:drawable/presence_invisible"
+      android:visibility="invisible" />
 
+  <ImageView
+      android:id="@+id/h2"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:src="@android:drawable/presence_invisible"
+      android:visibility="invisible" />
+
+  <ImageView
+      android:id="@+id/cl0"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:src="@android:drawable/presence_invisible"
+      android:visibility="invisible" />
+
+  <ImageView
+      android:id="@+id/cl1"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:src="@android:drawable/presence_invisible"
+      android:visibility="invisible" />
+
+  <ImageView
+      android:id="@+id/cl2"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:src="@android:drawable/presence_invisible"
+      android:visibility="invisible" />
+
+  <ImageView
+      android:id="@+id/cl3"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:src="@android:drawable/presence_invisible"
+      android:visibility="invisible" />
+
+  <ImageView
+      android:id="@+id/cl4"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:src="@android:drawable/presence_invisible"
+      android:visibility="invisible" />
+
+  <ImageView
+      android:id="@+id/cl5"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:src="@android:drawable/presence_invisible"
+      android:visibility="invisible" />
+
+  <ImageView
+      android:id="@+id/cl6"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:src="@android:drawable/presence_invisible"
+      android:visibility="invisible" />
+
+  <ImageView
+      android:id="@+id/cl7"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:src="@android:drawable/presence_invisible"
+      android:visibility="invisible" />
+
+  <ImageView
+      android:id="@+id/cr0"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:src="@android:drawable/presence_invisible"
+      android:visibility="invisible" />
+
+  <ImageView
+      android:id="@+id/cr1"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:src="@android:drawable/presence_invisible"
+      android:visibility="invisible" />
+
+  <ImageView
+      android:id="@+id/cr2"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:src="@android:drawable/presence_invisible"
+      android:visibility="invisible" />
+
+  <ImageView
+      android:id="@+id/cr3"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:src="@android:drawable/presence_invisible"
+      android:visibility="invisible" />
+
+  <ImageView
+      android:id="@+id/cr4"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:src="@android:drawable/presence_invisible"
+      android:visibility="invisible" />
+
+  <ImageView
+      android:id="@+id/cr5"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:src="@android:drawable/presence_invisible"
+      android:visibility="invisible" />
+
+  <ImageView
+      android:id="@+id/cr6"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:src="@android:drawable/presence_invisible"
+      android:visibility="invisible" />
+
+  <ImageView
+      android:id="@+id/cr7"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:src="@android:drawable/presence_invisible"
+      android:visibility="invisible" />
+
+  <ImageView
+      android:id="@+id/ll0"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:src="@android:drawable/presence_invisible"
+      android:visibility="invisible" />
+
+  <ImageView
+      android:id="@+id/ll1"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:src="@android:drawable/presence_invisible"
+      android:visibility="invisible" />
+
+  <ImageView
+      android:id="@+id/lr0"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:src="@android:drawable/presence_invisible"
+      android:visibility="invisible" />
+
+  <ImageView
+      android:id="@+id/lr1"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:src="@android:drawable/presence_invisible"
+      android:visibility="invisible" />
 
 </RelativeLayout>
