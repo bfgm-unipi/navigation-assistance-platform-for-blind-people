@@ -17,6 +17,7 @@ package com.google.ar.core.examples.kotlin.helloar
 
 import android.os.Bundle
 import android.util.Log
+import android.view.ViewGroup
 import android.widget.TextView
 import android.widget.Toast
 import android.widget.ImageView
@@ -172,7 +173,7 @@ class HelloArActivity : AppCompatActivity() {
         leftChest.setImageResource(R.drawable.left_chest)
         rightChest.setImageResource(R.drawable.right_chest)
         leftLeg.setImageResource(R.drawable.left_leg)
-        rightLeg.setImageResource(R.drawable.right_chest)
+        rightLeg.setImageResource(R.drawable.right_leg)
 
         // retrieve display metrics
         val displayMetrics = resources.displayMetrics
@@ -180,16 +181,16 @@ class HelloArActivity : AppCompatActivity() {
         val screenHeight = displayMetrics.heightPixels
 
         // move the image views
-        head.translationX = (screenWidth / 2.0f) - (head.width / 2.0f)
-        head.translationY = (screenHeight / 2.0f) - (head.height / 2.0f)
-        leftChest.translationX  = (screenWidth / 2.0f) - (head.width / 2.0f)
-        leftChest.translationY  = (screenHeight / 2.0f) - (head.height / 2.0f)
-        rightChest.translationX = (screenWidth / 2.0f) - (head.width / 2.0f)
-        rightChest.translationY = (screenHeight / 2.0f) - (head.height / 2.0f)
-        leftLeg.translationX  = (screenWidth / 2.0f) - (head.width / 2.0f)
-        leftLeg.translationY  = (screenHeight / 2.0f) - (head.height / 2.0f)
-        rightLeg.translationX = (screenWidth / 2.0f) - (head.width / 2.0f)
-        rightLeg.translationY = (screenHeight / 2.0f) - (head.height / 2.0f)
+        head.translationX = (screenWidth / 2.0f)  - (head.width / 2.0f)
+        head.translationY = screenHeight * 2 / 8.0f
+        leftChest.translationX  = (screenWidth / 2.0f)  - (leftChest.width)
+        leftChest.translationY  = head.translationY + head.height
+        rightChest.translationX = (screenWidth / 2.0f)
+        rightChest.translationY = leftChest.translationY
+        leftLeg.translationX  = (screenWidth / 2.0f)  - (leftLeg.width)
+        leftLeg.translationY  = leftChest.translationY + leftChest.height
+        rightLeg.translationX = (screenWidth / 2.0f)
+        rightLeg.translationY = leftLeg.translationY
 
         // set the image visible
         head.visibility = ImageView.VISIBLE
