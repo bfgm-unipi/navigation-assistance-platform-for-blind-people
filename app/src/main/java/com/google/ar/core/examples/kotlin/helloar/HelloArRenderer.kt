@@ -352,12 +352,23 @@ class HelloArRenderer(val activity: HelloArActivity) :
         // Keep the screen unlocked while tracking, but allow it to lock when tracking stops.
         trackingStateHelper.updateKeepScreenOnFlag(camera.trackingState)
 
-        // Draw background
+        // Draw background       /* --------- Matteo --------- */
         if (frame.timestamp != 0L && activity.depthSettings.drawCameraBackgroundEnabled()) {
             // Suppress rendering if the camera did not produce the first frame yet. This is to avoid
             // drawing possible leftover data from previous sessions if the texture is reused.
             backgroundRenderer.drawBackground(render)
         }
+
+        /* --------------- Matteo --------------- */
+
+        // draw user image
+        if (activity.depthSettings.drawUserCollisionStateEnabled()) {
+            activity.runOnUiThread(java.lang.Runnable {
+                activity.drawUser()
+            })
+        }
+
+        /* -------------------------------------- */
 
         // If not tracking, don't draw 3D objects.
         if (camera.trackingState == TrackingState.PAUSED) {

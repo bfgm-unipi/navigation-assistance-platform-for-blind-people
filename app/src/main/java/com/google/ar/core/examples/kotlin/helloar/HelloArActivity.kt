@@ -15,15 +15,11 @@
  */
 package com.google.ar.core.examples.kotlin.helloar
 
-import android.content.Context
-import android.opengl.GLSurfaceView
 import android.os.Bundle
-import android.util.DisplayMetrics
 import android.util.Log
-import android.widget.RelativeLayout
 import android.widget.TextView
 import android.widget.Toast
-import android.view.WindowManager
+import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
 import com.google.ar.core.Config
 import com.google.ar.core.Session
@@ -160,4 +156,48 @@ class HelloArActivity : AppCompatActivity() {
         super.onWindowFocusChanged(hasFocus)
         FullScreenHelper.setFullScreenOnWindowFocusChanged(this, hasFocus)
     }
+
+    /* --------------- Matteo --------------- */
+
+    fun drawUser() {
+        // get the image view references
+        val head: ImageView = findViewById(R.id.user_head)
+        val leftChest: ImageView  = findViewById(R.id.user_left_chest)
+        val rightChest: ImageView = findViewById(R.id.user_right_chest)
+        val leftLeg: ImageView  = findViewById(R.id.user_left_leg)
+        val rightLeg: ImageView = findViewById(R.id.user_right_leg)
+
+        // setup the image resources
+        head.setImageResource(R.drawable.head)
+        leftChest.setImageResource(R.drawable.left_chest)
+        rightChest.setImageResource(R.drawable.right_chest)
+        leftLeg.setImageResource(R.drawable.left_leg)
+        rightLeg.setImageResource(R.drawable.right_chest)
+
+        // retrieve display metrics
+        val displayMetrics = resources.displayMetrics
+        val screenWidth  = displayMetrics.widthPixels
+        val screenHeight = displayMetrics.heightPixels
+
+        // move the image views
+        head.translationX = (screenWidth / 2.0f) - (head.width / 2.0f)
+        head.translationY = (screenHeight / 2.0f) - (head.height / 2.0f)
+        leftChest.translationX  = (screenWidth / 2.0f) - (head.width / 2.0f)
+        leftChest.translationY  = (screenHeight / 2.0f) - (head.height / 2.0f)
+        rightChest.translationX = (screenWidth / 2.0f) - (head.width / 2.0f)
+        rightChest.translationY = (screenHeight / 2.0f) - (head.height / 2.0f)
+        leftLeg.translationX  = (screenWidth / 2.0f) - (head.width / 2.0f)
+        leftLeg.translationY  = (screenHeight / 2.0f) - (head.height / 2.0f)
+        rightLeg.translationX = (screenWidth / 2.0f) - (head.width / 2.0f)
+        rightLeg.translationY = (screenHeight / 2.0f) - (head.height / 2.0f)
+
+        // set the image visible
+        head.visibility = ImageView.VISIBLE
+        leftChest.visibility  = ImageView.VISIBLE
+        rightChest.visibility = ImageView.VISIBLE
+        leftLeg.visibility  = ImageView.VISIBLE
+        rightLeg.visibility = ImageView.VISIBLE
+    }
+
+    /* -------------------------------------- */
 }
