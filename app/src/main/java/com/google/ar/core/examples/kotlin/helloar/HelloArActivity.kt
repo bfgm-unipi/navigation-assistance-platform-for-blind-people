@@ -16,10 +16,8 @@
 package com.google.ar.core.examples.kotlin.helloar
 
 import android.content.Context
-import android.media.AudioAttributes
 import android.os.Build
 import android.os.Bundle
-import android.os.VibrationAttributes
 import android.os.VibrationEffect
 import android.util.Log
 import android.widget.TextView
@@ -57,6 +55,12 @@ class HelloArActivity : AppCompatActivity(), View.OnClickListener {
     lateinit var renderer: HelloArRenderer
 
     val depthSettings = DepthSettings()
+
+    /* ------------------ GIANLUCA --------------- */
+    // create a vibrator object
+    lateinit var vibrator: Vibrator
+
+    /* ------------------------------------------- */
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -102,8 +106,9 @@ class HelloArActivity : AppCompatActivity(), View.OnClickListener {
 
         /* ------------------ GIANLUCA --------------- */
 
-        var button: Button = findViewById(R.id.button2)
-        button.setOnClickListener(this)
+        vibrator = getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
+        var vibrationButton: Button = findViewById(R.id.vibration_button)
+        vibrationButton.setOnClickListener(this)
 
         /* ------------------------------------------- */
     }
@@ -175,17 +180,25 @@ class HelloArActivity : AppCompatActivity(), View.OnClickListener {
     /* ------------------ GIANLUCA --------------- */
     @RequiresApi(Build.VERSION_CODES.O)
     fun startVibration(vibration_duration: Long, waiting_duration: Long, amplitude: Int) {
-
-        // create a vibrator object
-        val vibrator = getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
-
-        // start vibration for 'duration' milliseconds and 'amplitude' (between 1 and 255)
         vibrator.vibrate(VibrationEffect.createWaveform(longArrayOf(vibration_duration, waiting_duration), intArrayOf(amplitude, 0), 0))
+    }
+
+    fun stopVibration() {
+        vibrator.cancel()
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onClick(p0: View?) {
         startVibration(500L, 100L, 255)
+        val vibrationButton: Button = findViewById(R.id.vibration_button)
+        if (vibrationButton.text == "start vibration") {
+            vibrationButton.text = "stop vibration"
+            startVibration(500L, 100L, 255)
+        }
+        else {
+            vibrationButton.text = "start vibration"
+            stopVibration()
+        }
     }
 
     /* ------------------------------------------- */
