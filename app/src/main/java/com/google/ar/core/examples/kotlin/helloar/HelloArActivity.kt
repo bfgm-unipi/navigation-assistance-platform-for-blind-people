@@ -180,7 +180,13 @@ class HelloArActivity : AppCompatActivity(), View.OnClickListener {
     /* ------------------ GIANLUCA --------------- */
     @RequiresApi(Build.VERSION_CODES.O)
     fun startVibration(vibration_duration: Long, waiting_duration: Long, amplitude: Int) {
-        vibrator.vibrate(VibrationEffect.createWaveform(longArrayOf(vibration_duration, waiting_duration), intArrayOf(amplitude, 0), 0))
+        vibrator.vibrate(
+            VibrationEffect.createWaveform(
+                longArrayOf(vibration_duration, waiting_duration),
+                intArrayOf(amplitude, 0),
+                0
+            )
+        )
     }
 
     fun stopVibration() {
