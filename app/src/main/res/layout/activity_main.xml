@@ -14,6 +14,7 @@
    limitations under the License.
 -->
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -116,6 +117,35 @@
       android:layout_height="wrap_content"
       android:text="RL" />
 
+  <ImageView
+      android:id="@+id/user_head"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:visibility="invisible" />
+
+  <ImageView
+      android:id="@+id/user_left_chest"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:visibility="invisible" />
+
+  <ImageView
+      android:id="@+id/user_right_chest"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:visibility="invisible" />
+
+  <ImageView
+      android:id="@+id/user_right_leg"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:visibility="invisible" />
+
+  <ImageView
+      android:id="@+id/user_left_leg"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:visibility="invisible" />
 
 
 </RelativeLayout>
