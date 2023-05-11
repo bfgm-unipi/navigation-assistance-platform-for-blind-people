@@ -28,6 +28,7 @@
     <!-- Matteo -->
     <item>Show Camera Background</item>
     <item>Show User Collision State</item>
+    <item>Show Collision Points</item>
     <!-- ****** -->
   </string-array>
   <string translatable="false" name="options_title_instant_placement">Instant Placement options</string>

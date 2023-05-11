@@ -98,7 +98,8 @@ class HelloArView(val activity: HelloArActivity) : DefaultLifecycleObserver {
                 activity.depthSettings.depthColorVisualizationEnabled(),
                 /* --------------- Matteo --------------- */
                 activity.depthSettings.drawCameraBackgroundEnabled(),
-                activity.depthSettings.drawUserCollisionStateEnabled()
+                activity.depthSettings.drawUserCollisionStateEnabled(),
+                activity.depthSettings.drawCollisionPointsEnabled()
                 /* -------------------------------------- */
             )
         if (session.isDepthModeSupported(Config.DepthMode.AUTOMATIC)) {
@@ -115,6 +116,7 @@ class HelloArView(val activity: HelloArActivity) : DefaultLifecycleObserver {
                     /* --------------- Matteo --------------- */
                     activity.depthSettings.setDrawCameraBackgroundEnabled(checkboxes[2])
                     activity.depthSettings.setDrawUserCollisionStateEnabled(checkboxes[3])
+                    activity.depthSettings.setDrawCollisionPointsEnabled(checkboxes[4])
                     /* -------------------------------------- */
                 }
                 .show()

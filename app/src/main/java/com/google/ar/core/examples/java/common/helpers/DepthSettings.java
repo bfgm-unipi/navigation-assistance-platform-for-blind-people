@@ -32,6 +32,7 @@ public class DepthSettings {
     /* --------------- Matteo --------------- */
     private boolean drawCameraBackground = true;
     private boolean drawUserCollisionState = false;
+    private boolean drawCollisionPoints = false;
     /* -------------------------------------- */
     private SharedPreferences sharedPreferences;
 
@@ -80,6 +81,12 @@ public class DepthSettings {
 
     public void setDrawUserCollisionStateEnabled(boolean drawUserCollisionStateEnabled) {
         this.drawUserCollisionState = drawUserCollisionStateEnabled;
+    }
+
+    public boolean drawCollisionPointsEnabled() { return drawCollisionPoints; }
+
+    public void setDrawCollisionPointsEnabled(boolean drawCollisionPointsEnabled) {
+        this.drawCollisionPoints = drawCollisionPointsEnabled;
     }
 
     /* -------------------------------------- */

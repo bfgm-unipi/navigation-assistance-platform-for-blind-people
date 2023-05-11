@@ -381,6 +381,12 @@ class HelloArRenderer(val activity: HelloArActivity) :
 
         /* -------------------------------------- */
 
+        // TODO: --------------- biagio ------------------
+        if (activity.depthSettings.drawCollisionPointsEnabled()) {
+            Log.i("HELLO_AR_RENDERER", "Checked Collision Points Checkbox")
+        }
+        // -----------------------------------------------
+
         // If not tracking, don't draw 3D objects.
         if (camera.trackingState == TrackingState.PAUSED) {
             return
