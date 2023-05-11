@@ -76,6 +76,7 @@ class HelloArActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
     var vibratorIsActive = false
     private var tts: TextToSpeech? = null
     var ttsLastWarning = ""
+    var lastIndication = ""
 
     /* ------------------------------------------- */
 
@@ -405,17 +406,19 @@ class HelloArActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
             else
                 text = "Full body obstacle"
 
-            if (ttsLastWarning != text){
-                speak(text, 0.7f)
-                ttsLastWarning = text
-            }
+            if (text == lastIndication)
+                if (ttsLastWarning != text){
+                    speak(text, 0.7f)
+                    ttsLastWarning = text
+                }
 
+            lastIndication = text
         }
-        else if (indications.size == 0) {
+        else{
             ttsLastWarning = ""
+            lastIndication = ""
            return
         }
-
 
     }
 
