@@ -86,14 +86,13 @@ class HelloArRenderer(val activity: HelloArActivity) :
         val CUBEMAP_NUMBER_OF_IMPORTANCE_SAMPLES = 32
     }
 
-    /* TEST */
-    var currentStatusGrid = false
+    private var collisionPointsHidden = true
 
     lateinit var render: SampleRender
     lateinit var planeRenderer: PlaneRenderer
     lateinit var backgroundRenderer: BackgroundRenderer
     lateinit var virtualSceneFramebuffer: Framebuffer
-    private var pointsCoordinates: DetectionPointsCoordinates = DetectionPointsCoordinates()
+    private var pointsCoordinates: CollisionPointsCoordinates = CollisionPointsCoordinates()
 
     var hasSetTextureNames = false
 
@@ -327,44 +326,29 @@ class HelloArRenderer(val activity: HelloArActivity) :
                 backgroundRenderer.updateCameraDepthTexture(depthImage)
 
                 for ((key, value) in pointsCoordinates.getPointCoordinatesMap()) {
-                    Log.i("La chiave e valore", ": "+ key + "" + value + "")
-
-
-                    val coordinates = pointsCoordinates.getCoordinatesByPointId("'$key'")
+                    val coordinates = pointsCoordinates.getCoordinatesByPointId(key)
                     val distance: Float=
                         coordinates?.let {
                             getMillimetersDepth(depthImage, it.first, coordinates.second).toFloat()
                         } ?: 0.0f
 
-                    if (distance >= pointsCoordinates.distanceThreshold){
-                        listOfClosePoints.add("'$key'")
-                        val bodyPart = key?.let { pointsCoordinates.getBodyPartByPointId("'$it'") }
+                    if (distance <= pointsCoordinates.distanceThreshold){
+                        listOfClosePoints.add(key)
+                        val bodyPart = key?.let { pointsCoordinates.getBodyPartByPointId(it) }
                         bodyPart?.let {
 
                             if (!listOfCloseBodyParts.contains("nuovo elemento")) {
                                 listOfCloseBodyParts.add(it)
                             }
                         }
-//                        listOfCloseBodyParts.add(pointsCoordinates.getBodyPartByPointId("'$key'"))
                     }
                 }
 
-                /* TEST */
-                val testPoints = mutableListOf<String>()
-                testPoints.add("h0")
-                testPoints.add("cl0")
-                testPoints.add("cr6")
-                testPoints.add("cr5")
-                testPoints.add("cr4")
-                testPoints.add("cr3")
-                testPoints.add("cr7")
-
-                if (this.currentStatusGrid) {
+                if (!this.collisionPointsHidden) {
                     this.activity.runOnUiThread(java.lang.Runnable {
-                        this.activity.updateGrid(testPoints)
+                        this.activity.updateGrid(listOfClosePoints)
                     })
                 }
-                /*------*/
 
                 depthImage.close()
             }
@@ -403,16 +387,16 @@ class HelloArRenderer(val activity: HelloArActivity) :
         /* -------------------------------------- */
 
         /* ---------------- Biagio ---------------- */
-        if (activity.depthSettings.drawCollisionPointsEnabled() && !this.currentStatusGrid) {
+        if (activity.depthSettings.drawCollisionPointsEnabled() && this.collisionPointsHidden) {
             this.activity.runOnUiThread(java.lang.Runnable {
                 this.activity.drawGrid()
             })
-            this.currentStatusGrid = true
-        } else if (!activity.depthSettings.drawCollisionPointsEnabled() && this.currentStatusGrid) {
+            this.collisionPointsHidden = false
+        } else if (!activity.depthSettings.drawCollisionPointsEnabled() && !this.collisionPointsHidden) {
             this.activity.runOnUiThread(java.lang.Runnable {
                 this.activity.hideGrid()
             })
-            this.currentStatusGrid = false
+            this.collisionPointsHidden = true
         }
         /* ---------------------------------------- */
 

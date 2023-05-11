@@ -1,8 +1,8 @@
 package com.google.ar.core.examples.kotlin.helloar
 
-class DetectionPointsCoordinates {
+class CollisionPointsCoordinates {
 
-    public val distanceThreshold: Float = 1.6.toFloat()
+    public val distanceThreshold: Float = 1600f
 
     companion object {
         

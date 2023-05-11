@@ -49,7 +49,7 @@ class HelloArActivity : AppCompatActivity() {
     lateinit var renderer: HelloArRenderer
 
     val depthSettings = DepthSettings()
-    private val pointsCoordinates = DetectionPointsCoordinates()
+    private val pointsCoordinates = CollisionPointsCoordinates()
 
     /* --------------- Matteo --------------- */
 
@@ -115,8 +115,8 @@ class HelloArActivity : AppCompatActivity() {
 
         for (key in pointsCoordinates.getKeys()) {
             val imageView = findViewById<ImageView>(resources.getIdentifier(key, "id", packageName))
-            imageView.translationX = pointsCoordinates.getCoordinatesById(key)!!.first * screenWidth.toFloat()
-            imageView.translationY = pointsCoordinates.getCoordinatesById(key)!!.second * screenHeight.toFloat()
+            imageView.translationX = pointsCoordinates.getCoordinatesByPointId(key)!!.first * screenWidth.toFloat()
+            imageView.translationY = pointsCoordinates.getCoordinatesByPointId(key)!!.second * screenHeight.toFloat()
             imageView.visibility = ImageView.VISIBLE
         }
     }
