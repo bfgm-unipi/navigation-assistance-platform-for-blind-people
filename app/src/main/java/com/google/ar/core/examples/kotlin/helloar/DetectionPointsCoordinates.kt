@@ -5,7 +5,7 @@ class DetectionPointsCoordinates {
     public val distanceThreshold: Float = 1.6.toFloat()
 
     companion object {
-
+        
         private val pointCoordinates = mutableMapOf<String, Pair<Float, Float>>()
 
         init {
@@ -33,8 +33,9 @@ class DetectionPointsCoordinates {
             pointCoordinates["lr0"] = Pair(5/8.0f, 7/8.0f)
             pointCoordinates["lr1"] = Pair(7/8.0f, 7/8.0f)
         }
-
+        
         private val bodyParts = mutableMapOf<String, Array<String>>()
+        
         init{
             bodyParts["head"] = arrayOf("h0", "h1", "h1")
             bodyParts["chest_left"] = arrayOf("cl0", "cl1", "cl2", "cl3", "cl4", "cl5", "cl6", "cl7")
@@ -43,6 +44,12 @@ class DetectionPointsCoordinates {
             bodyParts["lef_right"] = arrayOf("lr0", "lr1")
         }
     }
+
+    /* ---------------- Biagio ---------------- */
+    fun getKeys(): MutableSet<String> {
+        return pointCoordinates.keys
+    }
+    /* ---------------------------------------- */
 
     fun getCoordinatesByPointId(id: String): Pair<Float, Float>? {
         return pointCoordinates[id]

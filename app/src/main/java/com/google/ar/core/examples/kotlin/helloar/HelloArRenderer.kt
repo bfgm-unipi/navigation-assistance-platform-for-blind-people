@@ -86,6 +86,9 @@ class HelloArRenderer(val activity: HelloArActivity) :
         val CUBEMAP_NUMBER_OF_IMPORTANCE_SAMPLES = 32
     }
 
+    /* TEST */
+    var currentStatusGrid = false
+
     lateinit var render: SampleRender
     lateinit var planeRenderer: PlaneRenderer
     lateinit var backgroundRenderer: BackgroundRenderer
@@ -125,6 +128,10 @@ class HelloArRenderer(val activity: HelloArActivity) :
 
     val displayRotationHelper = DisplayRotationHelper(activity)
     val trackingStateHelper = TrackingStateHelper(activity)
+
+    /* --------------- Matteo --------------- */
+    var userImagesHidden = true
+    /* -------------------------------------- */
 
     override fun onResume(owner: LifecycleOwner) {
         displayRotationHelper.onResume()
@@ -342,6 +349,23 @@ class HelloArRenderer(val activity: HelloArActivity) :
                     }
                 }
 
+                /* TEST */
+                val testPoints = mutableListOf<String>()
+                testPoints.add("h0")
+                testPoints.add("cl0")
+                testPoints.add("cr6")
+                testPoints.add("cr5")
+                testPoints.add("cr4")
+                testPoints.add("cr3")
+                testPoints.add("cr7")
+
+                if (this.currentStatusGrid) {
+                    this.activity.runOnUiThread(java.lang.Runnable {
+                        this.activity.updateGrid(testPoints)
+                    })
+                }
+                /*------*/
+
                 depthImage.close()
             }
             catch (e: NotYetAvailableException) {
@@ -353,12 +377,44 @@ class HelloArRenderer(val activity: HelloArActivity) :
         // Keep the screen unlocked while tracking, but allow it to lock when tracking stops.
         trackingStateHelper.updateKeepScreenOnFlag(camera.trackingState)
 
-        // Draw background
-        if (frame.timestamp != 0L) {
+        // Draw background       /* --------- Matteo --------- */
+        if (frame.timestamp != 0L && activity.depthSettings.drawCameraBackgroundEnabled()) {
             // Suppress rendering if the camera did not produce the first frame yet. This is to avoid
             // drawing possible leftover data from previous sessions if the texture is reused.
             backgroundRenderer.drawBackground(render)
         }
+
+        /* --------------- Matteo --------------- */
+
+        // user images management
+        if (activity.depthSettings.drawUserCollisionStateEnabled()) {
+            if (userImagesHidden) {
+                userImagesHidden = false
+                activity.runOnUiThread(java.lang.Runnable { activity.drawUserImages() })
+            }
+            activity.runOnUiThread(java.lang.Runnable { activity.updateUserImages() })
+        } else {
+            if (!userImagesHidden) {
+                userImagesHidden = true
+                activity.runOnUiThread(java.lang.Runnable { activity.hideUserImages() })
+            }
+        }
+
+        /* -------------------------------------- */
+
+        /* ---------------- Biagio ---------------- */
+        if (activity.depthSettings.drawCollisionPointsEnabled() && !this.currentStatusGrid) {
+            this.activity.runOnUiThread(java.lang.Runnable {
+                this.activity.drawGrid()
+            })
+            this.currentStatusGrid = true
+        } else if (!activity.depthSettings.drawCollisionPointsEnabled() && this.currentStatusGrid) {
+            this.activity.runOnUiThread(java.lang.Runnable {
+                this.activity.hideGrid()
+            })
+            this.currentStatusGrid = false
+        }
+        /* ---------------------------------------- */
 
         // If not tracking, don't draw 3D objects.
         if (camera.trackingState == TrackingState.PAUSED) {

@@ -15,15 +15,11 @@
  */
 package com.google.ar.core.examples.kotlin.helloar
 
-import android.content.Context
-import android.opengl.GLSurfaceView
 import android.os.Bundle
-import android.util.DisplayMetrics
 import android.util.Log
-import android.widget.RelativeLayout
-import android.widget.TextView
 import android.widget.Toast
-import android.view.WindowManager
+import android.widget.ImageView
+import android.widget.RelativeLayout
 import androidx.appcompat.app.AppCompatActivity
 import com.google.ar.core.Config
 import com.google.ar.core.Session
@@ -53,6 +49,18 @@ class HelloArActivity : AppCompatActivity() {
     lateinit var renderer: HelloArRenderer
 
     val depthSettings = DepthSettings()
+    private val pointsCoordinates = DetectionPointsCoordinates()
+
+    /* --------------- Matteo --------------- */
+
+    // image view references
+    private lateinit var headImageView: ImageView
+    private lateinit var leftChestImageView: ImageView
+    private lateinit var rightChestImageView: ImageView
+    private lateinit var leftLegImageView: ImageView
+    private lateinit var rightLegImageView: ImageView
+
+    /* -------------------------------------- */
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -95,27 +103,44 @@ class HelloArActivity : AppCompatActivity() {
         SampleRender(view.surfaceView, renderer, assets)
 
         depthSettings.onCreate(this)
+        setupUserImages()
     }
 
-    fun printDistance(distanceId:String, pixelId: String, distance: Float, pixel_width: Float, pixel_height: Float) {
-
-        val textViewDistanceId = resources.getIdentifier(distanceId, "id", packageName)
-        val textDistance= findViewById<TextView>(textViewDistanceId)
-        textDistance.text = distanceId +": " + distance + " m"
-
+    /* ---------------- Biagio ---------------- */
+    fun drawGrid() {
+        // Retrieve display metrics
         val displayMetrics = resources.displayMetrics
         val screenWidth = displayMetrics.widthPixels
         val screenHeight = displayMetrics.heightPixels
 
-        val textViewPixelId = resources.getIdentifier(pixelId, "id", packageName)
-        val textPixel = findViewById<TextView>(textViewPixelId)
-
-        textPixel.x = pixel_width *  screenWidth.toFloat()
-        textPixel.y = pixel_height *  screenHeight.toFloat()
-
-        Log.i("Display partialscreenWidth AND screenWidth", ": " + pixel_width *  screenWidth + "," + screenWidth)
-
+        for (key in pointsCoordinates.getKeys()) {
+            val imageView = findViewById<ImageView>(resources.getIdentifier(key, "id", packageName))
+            imageView.translationX = pointsCoordinates.getCoordinatesById(key)!!.first * screenWidth.toFloat()
+            imageView.translationY = pointsCoordinates.getCoordinatesById(key)!!.second * screenHeight.toFloat()
+            imageView.visibility = ImageView.VISIBLE
+        }
     }
+
+    fun hideGrid() {
+        for (key in pointsCoordinates.getKeys()) {
+            val imageView = findViewById<ImageView>(resources.getIdentifier(key, "id", packageName))
+            imageView.visibility = ImageView.INVISIBLE
+        }
+    }
+
+    fun updateGrid(points: MutableList<String>) {
+        for (key in pointsCoordinates.getKeys()) {
+            val imageView = findViewById<ImageView>(resources.getIdentifier(key, "id", packageName))
+
+            if (points.contains(key)) {
+                imageView.setImageResource(android.R.drawable.presence_online)
+            } else {
+                imageView.setImageResource(android.R.drawable.presence_invisible)
+            }
+        }
+    }
+
+    /* ---------------------------------------- */
 
     // Configure the session, using Lighting Estimation, and Depth mode.
     fun configureSession(session: Session) {
@@ -160,4 +185,102 @@ class HelloArActivity : AppCompatActivity() {
         super.onWindowFocusChanged(hasFocus)
         FullScreenHelper.setFullScreenOnWindowFocusChanged(this, hasFocus)
     }
+
+    /* --------------- Matteo --------------- */
+
+    private fun setupUserImages() {
+        // retrieve all the references
+        headImageView = findViewById(R.id.user_head)
+        leftChestImageView = findViewById(R.id.user_left_chest)
+        rightChestImageView = findViewById(R.id.user_right_chest)
+        leftLegImageView  = findViewById(R.id.user_left_leg)
+        rightLegImageView = findViewById(R.id.user_right_leg)
+
+        // setup the image resources
+        headImageView.setImageResource(R.drawable.head)
+        leftChestImageView.setImageResource(R.drawable.left_chest)
+        rightChestImageView.setImageResource(R.drawable.right_chest)
+        leftLegImageView.setImageResource(R.drawable.left_leg)
+        rightLegImageView.setImageResource(R.drawable.right_leg)
+
+        /*/ setup their size
+        headImageView.layoutParams = ViewGroup.LayoutParams(
+            ViewGroup.LayoutParams.WRAP_CONTENT,
+            ViewGroup.LayoutParams.WRAP_CONTENT
+        )
+        val container = findViewById<View>(R.id.my_layout)
+        val params = headImageView.layoutParams as ViewGroup.LayoutParams
+        params.width = (container.width * 0.5).toInt()
+        params.height = (container.height * 0.75).toInt()
+        headImageView.layoutParams = params*/
+
+
+    }
+
+    fun drawUserImages() {
+        // retrieve display metrics
+        val displayMetrics = resources.displayMetrics
+        val screenWidth  = displayMetrics.widthPixels
+        val screenHeight = displayMetrics.heightPixels
+
+        /*/ TEST: setup image size
+        setupProportionalImageSize(headImageView)
+        setupProportionalImageSize(leftChestImageView)
+        setupProportionalImageSize(rightChestImageView)
+        setupProportionalImageSize(leftLegImageView)
+        setupProportionalImageSize(rightLegImageView)*/
+
+        // move the image views
+        headImageView.post {
+            headImageView.translationX = (screenWidth / 2.0f)  - (headImageView.width / 2.0f)
+            headImageView.translationY = screenHeight * 2 / 8.0f
+            leftChestImageView.translationX  = (screenWidth / 2.0f)  - (leftChestImageView.width)
+            leftChestImageView.translationY  = headImageView.translationY + headImageView.height
+            rightChestImageView.translationX = (screenWidth / 2.0f)
+            rightChestImageView.translationY = leftChestImageView.translationY
+            leftLegImageView.translationX  = (screenWidth / 2.0f)  - (leftLegImageView.width)
+            leftLegImageView.translationY  = leftChestImageView.translationY + leftChestImageView.height
+            rightLegImageView.translationX = (screenWidth / 2.0f)
+            rightLegImageView.translationY = leftLegImageView.translationY
+        }
+
+        // set the images visible
+        headImageView.visibility = ImageView.VISIBLE
+        leftChestImageView.visibility  = ImageView.VISIBLE
+        rightChestImageView.visibility = ImageView.VISIBLE
+        leftLegImageView.visibility  = ImageView.VISIBLE
+        rightLegImageView.visibility = ImageView.VISIBLE
+    }
+
+    // TODO: fix proportional resize
+    private fun setupProportionalImageSize(imageView: ImageView) {
+        val parentLayout = findViewById<RelativeLayout>(R.id.my_layout)
+        val layoutParams = RelativeLayout.LayoutParams(
+            (parentLayout.width * 0.25).toInt(),
+            (parentLayout.height * 0.25).toInt()
+        )
+        layoutParams.addRule(RelativeLayout.ALIGN_PARENT_START)
+        layoutParams.addRule(RelativeLayout.ALIGN_PARENT_TOP)
+        imageView.layoutParams = layoutParams
+    }
+
+    fun updateUserImages() {
+        // TODO: setup the update image resources
+        headImageView.setImageResource(R.drawable.head_red)
+        leftChestImageView.setImageResource(R.drawable.left_chest_red)
+        rightChestImageView.setImageResource(R.drawable.right_chest)
+        leftLegImageView.setImageResource(R.drawable.left_leg)
+        rightLegImageView.setImageResource(R.drawable.right_leg_red)
+    }
+
+    fun hideUserImages() {
+        // set the images invisible
+        headImageView.visibility = ImageView.INVISIBLE
+        leftChestImageView.visibility  = ImageView.INVISIBLE
+        rightChestImageView.visibility = ImageView.INVISIBLE
+        leftLegImageView.visibility  = ImageView.INVISIBLE
+        rightLegImageView.visibility = ImageView.INVISIBLE
+    }
+
+    /* -------------------------------------- */
 }
