@@ -33,6 +33,8 @@ public class DepthSettings {
     private boolean drawCameraBackground = true;
     private boolean drawUserCollisionState = false;
     private boolean drawCollisionPoints = false;
+    private boolean enableVibrationWarning = false;
+    private boolean enableSpeechWarnings = false;
     /* -------------------------------------- */
     private SharedPreferences sharedPreferences;
 
@@ -87,6 +89,18 @@ public class DepthSettings {
 
     public void setDrawCollisionPointsEnabled(boolean drawCollisionPointsEnabled) {
         this.drawCollisionPoints = drawCollisionPointsEnabled;
+    }
+
+    public boolean enableVibrationWarningEnabled() { return enableVibrationWarning; }
+
+    public void setEnableVibrationWarningEnabled(boolean enableVibrationWarningEnabled) {
+        this.enableVibrationWarning = enableVibrationWarningEnabled;
+    }
+
+    public boolean enableSpeechWarningsEnabled() { return enableSpeechWarnings; }
+
+    public void setEnableSpeechWarningsEnabled(boolean enableSpeechWarningsEnabled) {
+        this.enableSpeechWarnings = enableSpeechWarningsEnabled;
     }
 
     /* -------------------------------------- */

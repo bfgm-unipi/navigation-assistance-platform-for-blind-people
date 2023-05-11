@@ -389,6 +389,10 @@ class HelloArRenderer(val activity: HelloArActivity) :
             }
         }
 
+        // TODO: remove
+        if (activity.depthSettings.enableVibrationWarningEnabled()) { Log.i("HELLO_AR_RENDERER", "Vibration Enabled") }
+        if (activity.depthSettings.enableSpeechWarningsEnabled()) { Log.i("HELLO_AR_RENDERER", "Speech Enabled") }
+
         /* -------------------------------------- */
 
         /* ---------------- Biagio ---------------- */

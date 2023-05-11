@@ -99,7 +99,9 @@ class HelloArView(val activity: HelloArActivity) : DefaultLifecycleObserver {
                 /* --------------- Matteo --------------- */
                 activity.depthSettings.drawCameraBackgroundEnabled(),
                 activity.depthSettings.drawUserCollisionStateEnabled(),
-                activity.depthSettings.drawCollisionPointsEnabled()
+                activity.depthSettings.drawCollisionPointsEnabled(),
+                activity.depthSettings.enableVibrationWarningEnabled(),
+                activity.depthSettings.enableSpeechWarningsEnabled()
                 /* -------------------------------------- */
             )
         if (session.isDepthModeSupported(Config.DepthMode.AUTOMATIC)) {
@@ -117,6 +119,8 @@ class HelloArView(val activity: HelloArActivity) : DefaultLifecycleObserver {
                     activity.depthSettings.setDrawCameraBackgroundEnabled(checkboxes[2])
                     activity.depthSettings.setDrawUserCollisionStateEnabled(checkboxes[3])
                     activity.depthSettings.setDrawCollisionPointsEnabled(checkboxes[4])
+                    activity.depthSettings.setEnableVibrationWarningEnabled(checkboxes[5])
+                    activity.depthSettings.setEnableSpeechWarningsEnabled(checkboxes[6])
                     /* -------------------------------------- */
                 }
                 .show()
