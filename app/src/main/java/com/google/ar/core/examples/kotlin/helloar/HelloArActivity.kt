@@ -75,7 +75,7 @@ class HelloArActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
     lateinit var vibrator: Vibrator
     var vibratorIsActive = false
     private var tts: TextToSpeech? = null
-    var ttsIsActive = false
+    var ttsLastWarning = ""
 
     /* ------------------------------------------- */
 
@@ -381,9 +381,8 @@ class HelloArActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
         "lef_right"
          */
 
-        if (indications.size > 0 && !ttsIsActive) {
+        if (indications.size > 0) {
 
-            ttsIsActive = true
             var text = "Something went wrong"
 
             if (indications.size == 1) {
@@ -406,11 +405,14 @@ class HelloArActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
             else
                 text = "Full body obstacle"
 
-            speak(text, 0.7f)
+            if (ttsLastWarning != text){
+                speak(text, 0.7f)
+                ttsLastWarning = text
+            }
 
         }
         else if (indications.size == 0) {
-           ttsIsActive = false
+            ttsLastWarning = ""
            return
         }
 
