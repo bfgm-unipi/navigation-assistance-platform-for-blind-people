@@ -17,7 +17,6 @@ package com.google.ar.core.examples.kotlin.helloar
 
 import android.os.Bundle
 import android.util.Log
-import android.view.ViewGroup
 import android.widget.TextView
 import android.widget.Toast
 import android.widget.ImageView
@@ -50,6 +49,17 @@ class HelloArActivity : AppCompatActivity() {
     lateinit var renderer: HelloArRenderer
 
     val depthSettings = DepthSettings()
+
+    /* --------------- Matteo --------------- */
+
+    // image view references
+    private lateinit var headImageView: ImageView
+    private lateinit var leftChestImageView: ImageView
+    private lateinit var rightChestImageView: ImageView
+    private lateinit var leftLegImageView: ImageView
+    private lateinit var rightLegImageView: ImageView
+
+    /* -------------------------------------- */
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -92,6 +102,7 @@ class HelloArActivity : AppCompatActivity() {
         SampleRender(view.surfaceView, renderer, assets)
 
         depthSettings.onCreate(this)
+        setupUserImages()
     }
 
     fun printDistance(distanceId:String, pixelId: String, distance: Float, pixel_width: Float, pixel_height: Float) {
@@ -160,76 +171,64 @@ class HelloArActivity : AppCompatActivity() {
 
     /* --------------- Matteo --------------- */
 
-    fun drawUserImages() {
-        // get the image view references
-        val head: ImageView = findViewById(R.id.user_head)
-        val leftChest: ImageView  = findViewById(R.id.user_left_chest)
-        val rightChest: ImageView = findViewById(R.id.user_right_chest)
-        val leftLeg: ImageView  = findViewById(R.id.user_left_leg)
-        val rightLeg: ImageView = findViewById(R.id.user_right_leg)
+    private fun setupUserImages() {
+        // retrieve all the references
+        headImageView = findViewById(R.id.user_head)
+        leftChestImageView = findViewById(R.id.user_left_chest)
+        rightChestImageView = findViewById(R.id.user_right_chest)
+        leftLegImageView  = findViewById(R.id.user_left_leg)
+        rightLegImageView = findViewById(R.id.user_right_leg)
 
         // setup the image resources
-        head.setImageResource(R.drawable.head)
-        leftChest.setImageResource(R.drawable.left_chest)
-        rightChest.setImageResource(R.drawable.right_chest)
-        leftLeg.setImageResource(R.drawable.left_leg)
-        rightLeg.setImageResource(R.drawable.right_leg)
+        headImageView.setImageResource(R.drawable.head)
+        leftChestImageView.setImageResource(R.drawable.left_chest)
+        rightChestImageView.setImageResource(R.drawable.right_chest)
+        leftLegImageView.setImageResource(R.drawable.left_leg)
+        rightLegImageView.setImageResource(R.drawable.right_leg)
+    }
 
+    fun drawUserImages() {
         // retrieve display metrics
         val displayMetrics = resources.displayMetrics
         val screenWidth  = displayMetrics.widthPixels
         val screenHeight = displayMetrics.heightPixels
 
         // move the image views
-        head.translationX = (screenWidth / 2.0f)  - (head.width / 2.0f)
-        head.translationY = screenHeight * 2 / 8.0f
-        leftChest.translationX  = (screenWidth / 2.0f)  - (leftChest.width)
-        leftChest.translationY  = head.translationY + head.height
-        rightChest.translationX = (screenWidth / 2.0f)
-        rightChest.translationY = leftChest.translationY
-        leftLeg.translationX  = (screenWidth / 2.0f)  - (leftLeg.width)
-        leftLeg.translationY  = leftChest.translationY + leftChest.height
-        rightLeg.translationX = (screenWidth / 2.0f)
-        rightLeg.translationY = leftLeg.translationY
+        headImageView.translationX = (screenWidth / 2.0f)  - (headImageView.width / 2.0f)
+        headImageView.translationY = screenHeight * 2 / 8.0f
+        leftChestImageView.translationX  = (screenWidth / 2.0f)  - (leftChestImageView.width)
+        leftChestImageView.translationY  = headImageView.translationY + headImageView.height
+        rightChestImageView.translationX = (screenWidth / 2.0f)
+        rightChestImageView.translationY = leftChestImageView.translationY
+        leftLegImageView.translationX  = (screenWidth / 2.0f)  - (leftLegImageView.width)
+        leftLegImageView.translationY  = leftChestImageView.translationY + leftChestImageView.height
+        rightLegImageView.translationX = (screenWidth / 2.0f)
+        rightLegImageView.translationY = leftLegImageView.translationY
 
         // set the images visible
-        head.visibility = ImageView.VISIBLE
-        leftChest.visibility  = ImageView.VISIBLE
-        rightChest.visibility = ImageView.VISIBLE
-        leftLeg.visibility  = ImageView.VISIBLE
-        rightLeg.visibility = ImageView.VISIBLE
+        headImageView.visibility = ImageView.VISIBLE
+        leftChestImageView.visibility  = ImageView.VISIBLE
+        rightChestImageView.visibility = ImageView.VISIBLE
+        leftLegImageView.visibility  = ImageView.VISIBLE
+        rightLegImageView.visibility = ImageView.VISIBLE
     }
 
     fun updateUserImages() {
-        // get the image view references
-        val head: ImageView = findViewById(R.id.user_head)
-        val leftChest: ImageView  = findViewById(R.id.user_left_chest)
-        val rightChest: ImageView = findViewById(R.id.user_right_chest)
-        val leftLeg: ImageView  = findViewById(R.id.user_left_leg)
-        val rightLeg: ImageView = findViewById(R.id.user_right_leg)
-
         // TODO: setup the update image resources
-        head.setImageResource(R.drawable.head_red)
-        leftChest.setImageResource(R.drawable.left_chest_red)
-        rightChest.setImageResource(R.drawable.right_chest)
-        leftLeg.setImageResource(R.drawable.left_leg)
-        rightLeg.setImageResource(R.drawable.right_leg_red)
+        headImageView.setImageResource(R.drawable.head_red)
+        leftChestImageView.setImageResource(R.drawable.left_chest_red)
+        rightChestImageView.setImageResource(R.drawable.right_chest)
+        leftLegImageView.setImageResource(R.drawable.left_leg)
+        rightLegImageView.setImageResource(R.drawable.right_leg_red)
     }
 
     fun hideUserImages() {
-        // get the image view references
-        val head: ImageView = findViewById(R.id.user_head)
-        val leftChest: ImageView  = findViewById(R.id.user_left_chest)
-        val rightChest: ImageView = findViewById(R.id.user_right_chest)
-        val leftLeg: ImageView  = findViewById(R.id.user_left_leg)
-        val rightLeg: ImageView = findViewById(R.id.user_right_leg)
-
         // set the images invisible
-        head.visibility = ImageView.INVISIBLE
-        leftChest.visibility  = ImageView.INVISIBLE
-        rightChest.visibility = ImageView.INVISIBLE
-        leftLeg.visibility  = ImageView.INVISIBLE
-        rightLeg.visibility = ImageView.INVISIBLE
+        headImageView.visibility = ImageView.INVISIBLE
+        leftChestImageView.visibility  = ImageView.INVISIBLE
+        rightChestImageView.visibility = ImageView.INVISIBLE
+        leftLegImageView.visibility  = ImageView.INVISIBLE
+        rightLegImageView.visibility = ImageView.INVISIBLE
     }
 
     /* -------------------------------------- */
