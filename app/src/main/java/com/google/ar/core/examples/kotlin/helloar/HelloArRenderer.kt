@@ -336,7 +336,7 @@ class HelloArRenderer(val activity: HelloArActivity) :
                         } ?: 0.0f
 
                     if (distance <= pointsCoordinates.distanceThreshold){
-                        listOfClosePoints[key] = Pair(distance, true)
+                        listOfClosePoints[key] = Pair(distance/1000, true)
                         val bodyPart = key?.let { pointsCoordinates.getBodyPartByPointId(it) }
                         bodyPart?.let {
 
@@ -346,13 +346,13 @@ class HelloArRenderer(val activity: HelloArActivity) :
                         }
                     }
                     else{
-                        listOfClosePoints[key] = Pair(distance, false)
+                        listOfClosePoints[key] = Pair(distance/1000, false)
                     }
                 }
 
                 if (!this.collisionPointsHidden) {
                     this.activity.runOnUiThread(java.lang.Runnable {
-                        // this.activity.updateGrid(listOfClosePoints)
+                        this.activity.updateGrid(listOfClosePoints)
                     })
                 }
 

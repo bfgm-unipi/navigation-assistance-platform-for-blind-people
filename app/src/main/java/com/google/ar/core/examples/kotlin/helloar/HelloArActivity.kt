@@ -28,6 +28,7 @@ import android.widget.Button
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import android.speech.tts.TextToSpeech
+import android.util.TypedValue
 import android.widget.TextView
 import com.google.ar.core.Config
 import com.google.ar.core.Session
@@ -147,11 +148,13 @@ class HelloArActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
             imageView.translationY = pointsCoordinates.getCoordinatesByPointId(key)!!.second * screenHeight.toFloat()
             imageView.visibility = ImageView.VISIBLE
 
+            val scale = displayMetrics.density
+            val pixelsToTranslate = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 55f, resources.displayMetrics)
+
             val textView = findViewById<TextView>(resources.getIdentifier(key + "_distance", "id", packageName))
-            textView.translationX = pointsCoordinates.getCoordinatesByPointId(key)!!.first * screenWidth.toFloat()
-            textView.translationY = pointsCoordinates.getCoordinatesByPointId(key)!!.second * screenHeight.toFloat() + 50
-            // textView.visibility = TextView.VISIBLE
-            // textView.text = "0m"
+            textView.translationX = pointsCoordinates.getCoordinatesByPointId(key)!!.first * screenWidth.toFloat() - pixelsToTranslate/scale
+            textView.translationY = pointsCoordinates.getCoordinatesByPointId(key)!!.second * screenHeight.toFloat() + pixelsToTranslate/scale
+            textView.visibility = TextView.VISIBLE
         }
     }
 
