@@ -27,6 +27,7 @@ import android.view.View
 import android.widget.Button
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+import android.speech.tts.TextToSpeech
 import com.google.ar.core.Config
 import com.google.ar.core.Session
 import com.google.ar.core.examples.java.common.helpers.CameraPermissionHelper
@@ -39,13 +40,14 @@ import com.google.ar.core.exceptions.UnavailableApkTooOldException
 import com.google.ar.core.exceptions.UnavailableDeviceNotCompatibleException
 import com.google.ar.core.exceptions.UnavailableSdkTooOldException
 import com.google.ar.core.exceptions.UnavailableUserDeclinedInstallationException
+import java.util.Locale
 
 /**
  * This is a simple example that shows how to create an augmented reality (AR) application using the
  * ARCore API. The application will display any detected planes and will allow the user to tap on a
  * plane to place a 3D model.
  */
-class HelloArActivity : AppCompatActivity(), View.OnClickListener {
+class HelloArActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
     companion object {
         private const val TAG = "HelloArActivity"
     }
@@ -57,11 +59,13 @@ class HelloArActivity : AppCompatActivity(), View.OnClickListener {
     val depthSettings = DepthSettings()
 
     /* ------------------ GIANLUCA --------------- */
-    // create a vibrator object
+
     lateinit var vibrator: Vibrator
+    private var tts: TextToSpeech? = null
 
     /* ------------------------------------------- */
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -108,7 +112,10 @@ class HelloArActivity : AppCompatActivity(), View.OnClickListener {
 
         vibrator = getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
         var vibrationButton: Button = findViewById(R.id.vibration_button)
-        vibrationButton.setOnClickListener(this)
+        var speakButton: Button = findViewById(R.id.speak_button)
+        vibrationButton.setOnClickListener{ onVibrate() }
+        speakButton.setOnClickListener{ onSpeak() }
+        tts = TextToSpeech(this, this)
 
         /* ------------------------------------------- */
     }
@@ -194,7 +201,7 @@ class HelloArActivity : AppCompatActivity(), View.OnClickListener {
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
-    override fun onClick(p0: View?) {
+    fun onVibrate() {
         startVibration(500L, 100L, 255)
         val vibrationButton: Button = findViewById(R.id.vibration_button)
         if (vibrationButton.text == "start vibration") {
@@ -205,6 +212,30 @@ class HelloArActivity : AppCompatActivity(), View.OnClickListener {
             vibrationButton.text = "start vibration"
             stopVibration()
         }
+    }
+
+    override fun onInit(status: Int) {
+        if (status == TextToSpeech.SUCCESS) {
+            val result = tts!!.setLanguage(Locale.ENGLISH)
+
+            if (result == TextToSpeech.LANG_MISSING_DATA || result == TextToSpeech.LANG_NOT_SUPPORTED) {
+                Log.e("TTS", "The Language not supported!")
+            }
+        }
+    }
+    fun onSpeak() {
+        val text = "Hello, the Text to Speech service is online"
+        tts!!.speak(text, TextToSpeech.QUEUE_FLUSH, null,"")
+    }
+
+    public override fun onDestroy() {
+        // Shutdown TTS when
+        // activity is destroyed
+        if (tts != null) {
+            tts!!.stop()
+            tts!!.shutdown()
+        }
+        super.onDestroy()
     }
 
     /* ------------------------------------------- */
