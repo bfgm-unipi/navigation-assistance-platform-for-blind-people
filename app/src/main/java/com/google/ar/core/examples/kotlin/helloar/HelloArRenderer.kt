@@ -93,7 +93,7 @@ class HelloArRenderer(val activity: HelloArActivity) :
     lateinit var planeRenderer: PlaneRenderer
     lateinit var backgroundRenderer: BackgroundRenderer
     lateinit var virtualSceneFramebuffer: Framebuffer
-    lateinit var pointsCoordinates: DetectionPointsCoordinates
+    private var pointsCoordinates: DetectionPointsCoordinates = DetectionPointsCoordinates()
 
     var hasSetTextureNames = false
 
@@ -268,6 +268,9 @@ class HelloArRenderer(val activity: HelloArActivity) :
     override fun onDrawFrame(render: SampleRender) {
         val session = session ?: return
 
+        val listOfClosePoints = mutableListOf<String>()
+        val listOfCloseBodyParts = mutableListOf<String>()
+
         // Texture names should only be set once on a GL thread unless they change. This is done during
         // onDrawFrame rather than onSurfaceCreated since the session is not guaranteed to have been
         // initialized during the execution of onSurfaceCreated.
@@ -323,24 +326,28 @@ class HelloArRenderer(val activity: HelloArActivity) :
                 val depthImage = frame.acquireDepthImage16Bits()
                 backgroundRenderer.updateCameraDepthTexture(depthImage)
 
-                /***********/
-                val width: Int = depthImage.width
-                val height: Int = depthImage.height
+                for ((key, value) in pointsCoordinates.getPointCoordinatesMap()) {
+                    Log.i("La chiave e valore", ": "+ key + "" + value + "")
 
-//                val center_distance = getMillimetersDepth(depthImage, level_width_1, level_height_2)
-//                this.activity.printDistance("c_d", "c_p", center_distance / 1000.0f, level_width_1, level_height_2)
-//                val head_distance = getMillimetersDepth(depthImage, level_width_1, level_height_1)
-//                this.activity.printDistance("h_d", "h_p", head_distance / 1000.0f, level_width_1, level_height_1)
-//                val left_arm_distance = getMillimetersDepth(depthImage, level_width_2_1, level_height_2)
-//                this.activity.printDistance("a_l_d", "a_l_p", left_arm_distance / 1000.0f, level_width_2_1, level_height_2)
-//                val right_arm_distance = getMillimetersDepth(depthImage, level_width_2_2, level_height_2)
-//                this.activity.printDistance("a_r_d", "a_r_p", right_arm_distance / 1000.0f, level_width_2_2 , level_height_2)
-//                val left_leg_distance = getMillimetersDepth(depthImage, level_width_2_1, level_height_3)
-//                this.activity.printDistance("l_l_d", "l_l_p", left_leg_distance / 1000.0f, level_width_2_1 , level_height_3)
-//                val right_leg_distance = getMillimetersDepth(depthImage, level_width_2_2, level_height_3)
-//                this.activity.printDistance("l_r_d", "l_r_p", right_leg_distance / 1000.0f, level_width_2_2, level_height_3)
 
-                /***********/
+                    val coordinates = pointsCoordinates.getCoordinatesByPointId("'$key'")
+                    val distance: Float=
+                        coordinates?.let {
+                            getMillimetersDepth(depthImage, it.first, coordinates.second).toFloat()
+                        } ?: 0.0f
+
+                    if (distance >= pointsCoordinates.distanceThreshold){
+                        listOfClosePoints.add("'$key'")
+                        val bodyPart = key?.let { pointsCoordinates.getBodyPartByPointId("'$it'") }
+                        bodyPart?.let {
+
+                            if (!listOfCloseBodyParts.contains("nuovo elemento")) {
+                                listOfCloseBodyParts.add(it)
+                            }
+                        }
+//                        listOfCloseBodyParts.add(pointsCoordinates.getBodyPartByPointId("'$key'"))
+                    }
+                }
 
                 /* TEST */
                 val testPoints = mutableListOf<String>()
@@ -360,7 +367,8 @@ class HelloArRenderer(val activity: HelloArActivity) :
                 /*------*/
 
                 depthImage.close()
-            } catch (e: NotYetAvailableException) {
+            }
+            catch (e: NotYetAvailableException) {
                 // This normally means that depth data is not available yet. This is normal so we will not
                 // spam the logcat with this.
             }
