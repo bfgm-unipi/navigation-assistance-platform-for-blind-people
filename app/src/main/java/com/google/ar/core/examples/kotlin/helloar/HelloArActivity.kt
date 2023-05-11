@@ -114,7 +114,7 @@ class HelloArActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
         var vibrationButton: Button = findViewById(R.id.vibration_button)
         var speakButton: Button = findViewById(R.id.speak_button)
         vibrationButton.setOnClickListener{ onVibrate() }
-        speakButton.setOnClickListener{ onSpeak() }
+        speakButton.setOnClickListener{ onSpeak("Hello, the Text to Speech service is online", 0.7f) }
         tts = TextToSpeech(this, this)
 
         /* ------------------------------------------- */
@@ -215,6 +215,7 @@ class HelloArActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
     }
 
     override fun onInit(status: Int) {
+        // TTS service initialization
         if (status == TextToSpeech.SUCCESS) {
             val result = tts!!.setLanguage(Locale.ENGLISH)
 
@@ -223,8 +224,8 @@ class HelloArActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
             }
         }
     }
-    fun onSpeak() {
-        val text = "Hello, the Text to Speech service is online"
+    fun onSpeak(text: String, speechRate: Float) {
+        tts!!.setSpeechRate(speechRate)
         tts!!.speak(text, TextToSpeech.QUEUE_FLUSH, null,"")
     }
 
@@ -236,6 +237,14 @@ class HelloArActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
             tts!!.shutdown()
         }
         super.onDestroy()
+    }
+
+    fun warningVibration(indications: MutableList<String>){
+        // TODO
+    }
+
+    fun warningSpeech(indications: MutableList<String>){
+        // TODO
     }
 
     /* ------------------------------------------- */
