@@ -349,7 +349,9 @@ class HelloArRenderer(val activity: HelloArActivity) :
                 testPoints.add("cr7")
 
                 if (this.currentStatusGrid) {
-                    this.activity.updateGrid(testPoints)
+                    this.activity.runOnUiThread(java.lang.Runnable {
+                        this.activity.updateGrid(testPoints)
+                    })
                 } else {
                     // just for testing
                     this.currentStatusGrid = true
@@ -383,7 +385,9 @@ class HelloArRenderer(val activity: HelloArActivity) :
             })
             this.currentStatusGrid = true
         } else if (!activity.depthSettings.drawGridEnabled() && this.currentStatusGrid) {
-            this.activity.hideGrid()
+            this.activity.runOnUiThread(java.lang.Runnable {
+                this.activity.hideGrid()
+            })
             this.currentStatusGrid = false
         }
         / ---------------------------------------- */
