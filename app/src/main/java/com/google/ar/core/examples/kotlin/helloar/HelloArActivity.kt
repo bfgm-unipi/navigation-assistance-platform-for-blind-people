@@ -420,6 +420,7 @@ class HelloArActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
         "lef_right"
          */
 
+        // TODO add command 'no more obstacles' and add command counter
         if (indications.size > 0) {
 
             var text = "Something went wrong"

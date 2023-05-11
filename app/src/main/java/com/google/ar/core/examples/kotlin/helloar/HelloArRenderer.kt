@@ -389,10 +389,6 @@ class HelloArRenderer(val activity: HelloArActivity) :
             }
         }
 
-        // TODO: remove
-        if (activity.depthSettings.enableVibrationWarningEnabled()) { Log.i("HELLO_AR_RENDERER", "Vibration Enabled") }
-        if (activity.depthSettings.enableSpeechWarningsEnabled()) { Log.i("HELLO_AR_RENDERER", "Speech Enabled") }
-
         /* -------------------------------------- */
 
         /* ---------------- Biagio ---------------- */
@@ -412,8 +408,12 @@ class HelloArRenderer(val activity: HelloArActivity) :
 
         /* ------------------ GIANLUCA --------------- */
 
-        activity.warningVibration(listOfCloseBodyParts)
-        activity.warningSpeech(listOfCloseBodyParts)
+        if (activity.depthSettings.enableVibrationWarningEnabled()) {
+            activity.warningVibration(listOfCloseBodyParts)
+        }
+        if (activity.depthSettings.enableSpeechWarningsEnabled()) {
+            activity.warningSpeech(listOfCloseBodyParts)
+        }
 
         /* ------------------------------------------- */
 
