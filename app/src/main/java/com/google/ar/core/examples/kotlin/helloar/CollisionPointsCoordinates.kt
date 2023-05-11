@@ -1,5 +1,6 @@
 package com.google.ar.core.examples.kotlin.helloar
 
+// -------------------- fabrizio ---------------------------------
 class CollisionPointsCoordinates {
 
     public val distanceThreshold: Float = 1600f
@@ -72,3 +73,6 @@ class CollisionPointsCoordinates {
         return bodyParts
     }
 }
+
+
+// -------------------- fabrizio -------------------------------

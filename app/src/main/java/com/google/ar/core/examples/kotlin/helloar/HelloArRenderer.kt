@@ -267,8 +267,10 @@ class HelloArRenderer(val activity: HelloArActivity) :
     override fun onDrawFrame(render: SampleRender) {
         val session = session ?: return
 
-        val listOfClosePoints = mutableListOf<String>()
+        // ---------------- fabrizio -----------------------------
+        val listOfClosePoints = mutableMapOf<String, Pair<Float, Boolean>>()
         val listOfCloseBodyParts = mutableListOf<String>()
+        // ---------------- fabrizio -----------------------------
 
         // Texture names should only be set once on a GL thread unless they change. This is done during
         // onDrawFrame rather than onSurfaceCreated since the session is not guaranteed to have been
@@ -325,6 +327,7 @@ class HelloArRenderer(val activity: HelloArActivity) :
                 val depthImage = frame.acquireDepthImage16Bits()
                 backgroundRenderer.updateCameraDepthTexture(depthImage)
 
+                // ---------------- fabrizio -----------------------------
                 for ((key, value) in pointsCoordinates.getPointCoordinatesMap()) {
                     val coordinates = pointsCoordinates.getCoordinatesByPointId(key)
                     val distance: Float=
@@ -333,7 +336,7 @@ class HelloArRenderer(val activity: HelloArActivity) :
                         } ?: 0.0f
 
                     if (distance <= pointsCoordinates.distanceThreshold){
-                        listOfClosePoints.add(key)
+                        listOfClosePoints[key] = Pair(distance, true)
                         val bodyPart = key?.let { pointsCoordinates.getBodyPartByPointId(it) }
                         bodyPart?.let {
 
@@ -341,6 +344,9 @@ class HelloArRenderer(val activity: HelloArActivity) :
                                 listOfCloseBodyParts.add(it)
                             }
                         }
+                    }
+                    else{
+                        listOfClosePoints[key] = Pair(distance, false)
                     }
                 }
 
@@ -357,6 +363,8 @@ class HelloArRenderer(val activity: HelloArActivity) :
                 // spam the logcat with this.
             }
         }
+
+        // -------------------- fabrizio -----------------------------
 
         // Keep the screen unlocked while tracking, but allow it to lock when tracking stops.
         trackingStateHelper.updateKeepScreenOnFlag(camera.trackingState)
