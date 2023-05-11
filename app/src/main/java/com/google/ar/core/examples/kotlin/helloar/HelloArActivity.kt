@@ -28,6 +28,7 @@ import android.widget.Button
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import android.speech.tts.TextToSpeech
+import android.widget.TextView
 import com.google.ar.core.Config
 import com.google.ar.core.Session
 import com.google.ar.core.examples.java.common.helpers.CameraPermissionHelper
@@ -145,6 +146,12 @@ class HelloArActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
             imageView.translationX = pointsCoordinates.getCoordinatesByPointId(key)!!.first * screenWidth.toFloat()
             imageView.translationY = pointsCoordinates.getCoordinatesByPointId(key)!!.second * screenHeight.toFloat()
             imageView.visibility = ImageView.VISIBLE
+
+            val textView = findViewById<TextView>(resources.getIdentifier(key + "_distance", "id", packageName))
+            textView.translationX = pointsCoordinates.getCoordinatesByPointId(key)!!.first * screenWidth.toFloat()
+            textView.translationY = pointsCoordinates.getCoordinatesByPointId(key)!!.second * screenHeight.toFloat() + 50
+            // textView.visibility = TextView.VISIBLE
+            // textView.text = "0m"
         }
     }
 
@@ -152,17 +159,23 @@ class HelloArActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
         for (key in pointsCoordinates.getKeys()) {
             val imageView = findViewById<ImageView>(resources.getIdentifier(key, "id", packageName))
             imageView.visibility = ImageView.INVISIBLE
+            val textView = findViewById<TextView>(resources.getIdentifier(key + "_distance", "id", packageName))
+            textView.visibility = TextView.INVISIBLE
         }
     }
 
-    fun updateGrid(points: MutableList<String>) {
-        for (key in pointsCoordinates.getKeys()) {
-            val imageView = findViewById<ImageView>(resources.getIdentifier(key, "id", packageName))
+    fun updateGrid(points: MutableMap<String, Pair<Float, Boolean>>) {
+        if (points.isNotEmpty()) {
+            for (key in pointsCoordinates.getKeys()) {
+                val imageView = findViewById<ImageView>(resources.getIdentifier(key, "id", packageName))
+                val textView = findViewById<TextView>(resources.getIdentifier(key + "_distance", "id", packageName))
+                textView.text = "" + (points[key]?.first ?: 0) + "m"
 
-            if (points.contains(key)) {
-                imageView.setImageResource(android.R.drawable.presence_online)
-            } else {
-                imageView.setImageResource(android.R.drawable.presence_invisible)
+                if (points[key]?.second == true) {
+                    imageView.setImageResource(android.R.drawable.presence_online)
+                } else {
+                    imageView.setImageResource(android.R.drawable.presence_invisible)
+                }
             }
         }
     }

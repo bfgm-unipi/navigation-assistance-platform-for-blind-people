@@ -346,7 +346,7 @@ class HelloArRenderer(val activity: HelloArActivity) :
 
                 if (!this.collisionPointsHidden) {
                     this.activity.runOnUiThread(java.lang.Runnable {
-                        this.activity.updateGrid(listOfClosePoints)
+                        // this.activity.updateGrid(listOfClosePoints)
                     })
                 }
 
