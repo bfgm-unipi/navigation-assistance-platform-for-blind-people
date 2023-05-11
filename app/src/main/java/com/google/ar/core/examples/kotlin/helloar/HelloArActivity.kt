@@ -120,26 +120,6 @@ class HelloArActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
         /* ------------------------------------------- */
     }
 
-    fun printDistance(distanceId:String, pixelId: String, distance: Float, pixel_width: Float, pixel_height: Float) {
-
-        val textViewDistanceId = resources.getIdentifier(distanceId, "id", packageName)
-        val textDistance= findViewById<TextView>(textViewDistanceId)
-        textDistance.text = distanceId +": " + distance + " m"
-
-        val displayMetrics = resources.displayMetrics
-        val screenWidth = displayMetrics.widthPixels
-        val screenHeight = displayMetrics.heightPixels
-
-        val textViewPixelId = resources.getIdentifier(pixelId, "id", packageName)
-        val textPixel = findViewById<TextView>(textViewPixelId)
-
-        textPixel.x = pixel_width *  screenWidth.toFloat()
-        textPixel.y = pixel_height *  screenHeight.toFloat()
-
-        Log.i("Display partialscreenWidth AND screenWidth", ": " + pixel_width *  screenWidth + "," + screenWidth)
-
-    }
-
     // Configure the session, using Lighting Estimation, and Depth mode.
     fun configureSession(session: Session) {
         session.configure(
