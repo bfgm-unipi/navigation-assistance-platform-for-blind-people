@@ -141,15 +141,14 @@ class HelloArActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
         val displayMetrics = resources.displayMetrics
         val screenWidth = displayMetrics.widthPixels
         val screenHeight = displayMetrics.heightPixels
+        val scale = displayMetrics.density
+        val pixelsToTranslate = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 55f, resources.displayMetrics)
 
         for (key in pointsCoordinates.getKeys()) {
             val imageView = findViewById<ImageView>(resources.getIdentifier(key, "id", packageName))
             imageView.translationX = pointsCoordinates.getCoordinatesByPointId(key)!!.first * screenWidth.toFloat()
             imageView.translationY = pointsCoordinates.getCoordinatesByPointId(key)!!.second * screenHeight.toFloat()
             imageView.visibility = ImageView.VISIBLE
-
-            val scale = displayMetrics.density
-            val pixelsToTranslate = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 55f, resources.displayMetrics)
 
             val textView = findViewById<TextView>(resources.getIdentifier(key + "_distance", "id", packageName))
             textView.translationX = pointsCoordinates.getCoordinatesByPointId(key)!!.first * screenWidth.toFloat() - pixelsToTranslate/scale
@@ -172,7 +171,7 @@ class HelloArActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
             for (key in pointsCoordinates.getKeys()) {
                 val imageView = findViewById<ImageView>(resources.getIdentifier(key, "id", packageName))
                 val textView = findViewById<TextView>(resources.getIdentifier(key + "_distance", "id", packageName))
-                textView.text = "" + (points[key]?.first ?: 0) + "m"
+                textView.text = (points[key]?.first ?: 0.0f).toString() + "m"
 
                 if (points[key]?.second == true) {
                     imageView.setImageResource(android.R.drawable.presence_online)

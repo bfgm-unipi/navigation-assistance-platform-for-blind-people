@@ -332,7 +332,7 @@ class HelloArRenderer(val activity: HelloArActivity) :
                     val coordinates = pointsCoordinates.getCoordinatesByPointId(key)
                     val distance: Float=
                         coordinates?.let {
-                            getMillimetersDepth(depthImage, it.first, coordinates.second).toFloat()
+                            getMillimetersDepth(depthImage, it.first, it.second).toFloat()
                         } ?: 0.0f
 
                     if (distance <= pointsCoordinates.distanceThreshold){
@@ -348,12 +348,6 @@ class HelloArRenderer(val activity: HelloArActivity) :
                     else{
                         listOfClosePoints[key] = Pair(distance/1000, false)
                     }
-                }
-
-                if (!this.collisionPointsHidden) {
-                    this.activity.runOnUiThread(java.lang.Runnable {
-                        this.activity.updateGrid(listOfClosePoints)
-                    })
                 }
 
                 depthImage.close()
@@ -395,16 +389,17 @@ class HelloArRenderer(val activity: HelloArActivity) :
         /* -------------------------------------- */
 
         /* ---------------- Biagio ---------------- */
-        if (activity.depthSettings.drawCollisionPointsEnabled() && this.collisionPointsHidden) {
-            this.activity.runOnUiThread(java.lang.Runnable {
-                this.activity.drawGrid()
-            })
-            this.collisionPointsHidden = false
-        } else if (!activity.depthSettings.drawCollisionPointsEnabled() && !this.collisionPointsHidden) {
-            this.activity.runOnUiThread(java.lang.Runnable {
-                this.activity.hideGrid()
-            })
-            this.collisionPointsHidden = true
+        if (activity.depthSettings.drawCollisionPointsEnabled()) {
+            if (this.collisionPointsHidden) {
+                this.activity.runOnUiThread(java.lang.Runnable { this.activity.drawGrid() })
+                this.collisionPointsHidden = false
+            }
+            this.activity.runOnUiThread(java.lang.Runnable { this.activity.updateGrid(listOfClosePoints) })
+        } else {
+            if (!this.collisionPointsHidden) {
+                this.activity.runOnUiThread(java.lang.Runnable { this.activity.hideGrid() })
+                this.collisionPointsHidden = true
+            }
         }
         /* ---------------------------------------- */
 
