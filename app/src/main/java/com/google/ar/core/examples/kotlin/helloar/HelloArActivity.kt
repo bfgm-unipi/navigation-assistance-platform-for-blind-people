@@ -17,9 +17,12 @@ package com.google.ar.core.examples.kotlin.helloar
 
 import android.os.Bundle
 import android.util.Log
+import android.view.View
+import android.view.ViewGroup
 import android.widget.TextView
 import android.widget.Toast
 import android.widget.ImageView
+import android.widget.RelativeLayout
 import androidx.appcompat.app.AppCompatActivity
 import com.google.ar.core.Config
 import com.google.ar.core.Session
@@ -185,6 +188,19 @@ class HelloArActivity : AppCompatActivity() {
         rightChestImageView.setImageResource(R.drawable.right_chest)
         leftLegImageView.setImageResource(R.drawable.left_leg)
         rightLegImageView.setImageResource(R.drawable.right_leg)
+
+        /*/ setup their size
+        headImageView.layoutParams = ViewGroup.LayoutParams(
+            ViewGroup.LayoutParams.WRAP_CONTENT,
+            ViewGroup.LayoutParams.WRAP_CONTENT
+        )
+        val container = findViewById<View>(R.id.my_layout)
+        val params = headImageView.layoutParams as ViewGroup.LayoutParams
+        params.width = (container.width * 0.5).toInt()
+        params.height = (container.height * 0.75).toInt()
+        headImageView.layoutParams = params*/
+
+
     }
 
     fun drawUserImages() {
@@ -193,17 +209,26 @@ class HelloArActivity : AppCompatActivity() {
         val screenWidth  = displayMetrics.widthPixels
         val screenHeight = displayMetrics.heightPixels
 
+        /*/ TEST: setup image size
+        setupProportionalImageSize(headImageView)
+        setupProportionalImageSize(leftChestImageView)
+        setupProportionalImageSize(rightChestImageView)
+        setupProportionalImageSize(leftLegImageView)
+        setupProportionalImageSize(rightLegImageView)*/
+
         // move the image views
-        headImageView.translationX = (screenWidth / 2.0f)  - (headImageView.width / 2.0f)
-        headImageView.translationY = screenHeight * 2 / 8.0f
-        leftChestImageView.translationX  = (screenWidth / 2.0f)  - (leftChestImageView.width)
-        leftChestImageView.translationY  = headImageView.translationY + headImageView.height
-        rightChestImageView.translationX = (screenWidth / 2.0f)
-        rightChestImageView.translationY = leftChestImageView.translationY
-        leftLegImageView.translationX  = (screenWidth / 2.0f)  - (leftLegImageView.width)
-        leftLegImageView.translationY  = leftChestImageView.translationY + leftChestImageView.height
-        rightLegImageView.translationX = (screenWidth / 2.0f)
-        rightLegImageView.translationY = leftLegImageView.translationY
+        headImageView.post {
+            headImageView.translationX = (screenWidth / 2.0f)  - (headImageView.width / 2.0f)
+            headImageView.translationY = screenHeight * 2 / 8.0f
+            leftChestImageView.translationX  = (screenWidth / 2.0f)  - (leftChestImageView.width)
+            leftChestImageView.translationY  = headImageView.translationY + headImageView.height
+            rightChestImageView.translationX = (screenWidth / 2.0f)
+            rightChestImageView.translationY = leftChestImageView.translationY
+            leftLegImageView.translationX  = (screenWidth / 2.0f)  - (leftLegImageView.width)
+            leftLegImageView.translationY  = leftChestImageView.translationY + leftChestImageView.height
+            rightLegImageView.translationX = (screenWidth / 2.0f)
+            rightLegImageView.translationY = leftLegImageView.translationY
+        }
 
         // set the images visible
         headImageView.visibility = ImageView.VISIBLE
@@ -211,6 +236,18 @@ class HelloArActivity : AppCompatActivity() {
         rightChestImageView.visibility = ImageView.VISIBLE
         leftLegImageView.visibility  = ImageView.VISIBLE
         rightLegImageView.visibility = ImageView.VISIBLE
+    }
+
+    // TODO: fix proportional resize
+    private fun setupProportionalImageSize(imageView: ImageView) {
+        val parentLayout = findViewById<RelativeLayout>(R.id.my_layout)
+        val layoutParams = RelativeLayout.LayoutParams(
+            (parentLayout.width * 0.25).toInt(),
+            (parentLayout.height * 0.25).toInt()
+        )
+        layoutParams.addRule(RelativeLayout.ALIGN_PARENT_START)
+        layoutParams.addRule(RelativeLayout.ALIGN_PARENT_TOP)
+        imageView.layoutParams = layoutParams
     }
 
     fun updateUserImages() {
