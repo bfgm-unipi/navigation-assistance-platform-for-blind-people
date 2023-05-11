@@ -18,7 +18,9 @@ package com.google.ar.core.examples.kotlin.helloar
 import android.media.Image
 import android.opengl.GLES30
 import android.opengl.Matrix
+import android.os.Build
 import android.util.Log
+import androidx.annotation.RequiresApi
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
 import com.google.ar.core.Anchor
@@ -264,6 +266,7 @@ class HelloArRenderer(val activity: HelloArActivity) :
         virtualSceneFramebuffer.resize(width, height)
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onDrawFrame(render: SampleRender) {
         val session = session ?: return
 
@@ -403,10 +406,18 @@ class HelloArRenderer(val activity: HelloArActivity) :
         }
         /* ---------------------------------------- */
 
+        /* ------------------ GIANLUCA --------------- */
+
+        activity.warningVibration(listOfCloseBodyParts)
+        activity.warningSpeech(listOfCloseBodyParts)
+
+        /* ------------------------------------------- */
+
         // If not tracking, don't draw 3D objects.
         if (camera.trackingState == TrackingState.PAUSED) {
             return
         }
+
     }
 
     //------------------------ Fabrizio -----------------------------
