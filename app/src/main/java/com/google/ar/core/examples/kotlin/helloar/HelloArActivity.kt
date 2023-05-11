@@ -73,7 +73,9 @@ class HelloArActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
     /* ------------------ GIANLUCA --------------- */
 
     lateinit var vibrator: Vibrator
+    var vibratorIsActive = false
     private var tts: TextToSpeech? = null
+    var ttsIsActive = false
 
     /* ------------------------------------------- */
 
@@ -127,7 +129,7 @@ class HelloArActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
         var vibrationButton: Button = findViewById(R.id.vibration_button)
         var speakButton: Button = findViewById(R.id.speak_button)
         vibrationButton.setOnClickListener{ onVibrate() }
-        speakButton.setOnClickListener{ onSpeak("Hello, the Text to Speech service is online", 0.7f) }
+        speakButton.setOnClickListener{ onSpeak() }
         tts = TextToSpeech(this, this)
 
         /* ------------------------------------------- */
@@ -338,9 +340,13 @@ class HelloArActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
             }
         }
     }
-    fun onSpeak(text: String, speechRate: Float) {
+
+    fun speak(text: String, speechRate: Float) {
         tts!!.setSpeechRate(speechRate)
         tts!!.speak(text, TextToSpeech.QUEUE_FLUSH, null,"")
+    }
+    fun onSpeak() {
+       speak("Hello, the Text to Speech service is online", 0.7f)
     }
 
     public override fun onDestroy() {
@@ -353,12 +359,62 @@ class HelloArActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
         super.onDestroy()
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     fun warningVibration(indications: MutableList<String>){
-        // TODO
+        if (indications.size > 0 && !vibratorIsActive){
+            vibratorIsActive = true
+            startVibration(500L, 100L, 255)
+        }
+        else if (indications.size == 0){
+            vibratorIsActive = false
+            stopVibration()
+        }
     }
 
     fun warningSpeech(indications: MutableList<String>){
-        // TODO
+
+        /*
+        "head"
+        "chest_left"
+        "chest_right"
+        "leg_left"
+        "lef_right"
+         */
+
+        if (indications.size > 0 && !ttsIsActive) {
+
+            ttsIsActive = true
+            var text = "Something went wrong"
+
+            if (indications.size == 1) {
+                when (indications[0]) {
+                    "head" -> text = "Head level obstacle"
+                    "chest_left" -> text = "Left torso level obstacle"
+                    "chest_right" -> text = "Right torso level obstacle"
+                    "leg_left" -> text = "Left floor level obstacle"
+                    "leg_right" -> text = "Right floor level obstacle"
+                }
+            }
+            else if (indications.size == 2) {
+                when {
+                    ( "chest_left"  in indications && "chest_right" in indications ) -> text = "Torso level obstacle"
+                    ("leg_left" in indications && "leg_right" in indications) -> text = "Floor level obstacle"
+                    ( "chest_left"  in indications && "leg_left" in indications ) -> text = "Full left obstacle"
+                    ( "chest_right"  in indications && "leg_right" in indications ) -> text = "Full right obstacle"
+                }
+            }
+            else
+                text = "Full body obstacle"
+
+            speak(text, 0.7f)
+
+        }
+        else if (indications.size == 0) {
+           ttsIsActive = false
+           return
+        }
+
+
     }
 
     /* ------------------------------------------- */
