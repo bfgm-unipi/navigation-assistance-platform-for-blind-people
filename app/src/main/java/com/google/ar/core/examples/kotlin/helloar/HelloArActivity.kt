@@ -17,9 +17,6 @@ package com.google.ar.core.examples.kotlin.helloar
 
 import android.os.Bundle
 import android.util.Log
-import android.view.View
-import android.view.ViewGroup
-import android.widget.TextView
 import android.widget.Toast
 import android.widget.ImageView
 import android.widget.RelativeLayout
@@ -52,6 +49,7 @@ class HelloArActivity : AppCompatActivity() {
     lateinit var renderer: HelloArRenderer
 
     val depthSettings = DepthSettings()
+    private val pointsCoordinates = DetectionPointsCoordinates()
 
     /* --------------- Matteo --------------- */
 
@@ -108,25 +106,41 @@ class HelloArActivity : AppCompatActivity() {
         setupUserImages()
     }
 
-    fun printDistance(distanceId:String, pixelId: String, distance: Float, pixel_width: Float, pixel_height: Float) {
-
-        val textViewDistanceId = resources.getIdentifier(distanceId, "id", packageName)
-        val textDistance= findViewById<TextView>(textViewDistanceId)
-        textDistance.text = distanceId +": " + distance + " m"
-
+    /* ---------------- Biagio ---------------- */
+    fun drawGrid() {
+        // Retrieve display metrics
         val displayMetrics = resources.displayMetrics
         val screenWidth = displayMetrics.widthPixels
         val screenHeight = displayMetrics.heightPixels
 
-        val textViewPixelId = resources.getIdentifier(pixelId, "id", packageName)
-        val textPixel = findViewById<TextView>(textViewPixelId)
-
-        textPixel.x = pixel_width *  screenWidth.toFloat()
-        textPixel.y = pixel_height *  screenHeight.toFloat()
-
-        Log.i("Display partialscreenWidth AND screenWidth", ": " + pixel_width *  screenWidth + "," + screenWidth)
-
+        for (key in pointsCoordinates.getKeys()) {
+            val imageView = findViewById<ImageView>(resources.getIdentifier(key, "id", packageName))
+            imageView.translationX = pointsCoordinates.getCoordinatesById(key)!!.first * screenWidth.toFloat()
+            imageView.translationY = pointsCoordinates.getCoordinatesById(key)!!.second * screenHeight.toFloat()
+            imageView.visibility = ImageView.VISIBLE
+        }
     }
+
+    fun hideGrid() {
+        for (key in pointsCoordinates.getKeys()) {
+            val imageView = findViewById<ImageView>(resources.getIdentifier(key, "id", packageName))
+            imageView.visibility = ImageView.INVISIBLE
+        }
+    }
+
+    fun updateGrid(points: MutableList<String>) {
+        for (key in pointsCoordinates.getKeys()) {
+            val imageView = findViewById<ImageView>(resources.getIdentifier(key, "id", packageName))
+
+            if (points.contains(key)) {
+                imageView.setImageResource(android.R.drawable.presence_online)
+            } else {
+                imageView.setImageResource(android.R.drawable.presence_invisible)
+            }
+        }
+    }
+
+    /* ---------------------------------------- */
 
     // Configure the session, using Lighting Estimation, and Depth mode.
     fun configureSession(session: Session) {

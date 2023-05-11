@@ -86,10 +86,15 @@ class HelloArRenderer(val activity: HelloArActivity) :
         val CUBEMAP_NUMBER_OF_IMPORTANCE_SAMPLES = 32
     }
 
+    /* TEST */
+    var currentStatusGrid = false
+
     lateinit var render: SampleRender
     lateinit var planeRenderer: PlaneRenderer
     lateinit var backgroundRenderer: BackgroundRenderer
     lateinit var virtualSceneFramebuffer: Framebuffer
+    lateinit var pointsCoordinates: DetectionPointsCoordinates
+
     var hasSetTextureNames = false
 
     // Point Cloud
@@ -322,29 +327,37 @@ class HelloArRenderer(val activity: HelloArActivity) :
                 val width: Int = depthImage.width
                 val height: Int = depthImage.height
 
-                val level_height_1: Float = 1/4.0f
-                val level_height_2: Float = 1/2.0f
-                val level_height_3: Float = 3/4.0f
-
-                val level_width_1: Float = 1/2.0f
-                val level_width_2_1: Float = 1/3.0f
-                val level_width_2_2: Float = 2/3.0f
-
-
-                val center_distance = getMillimetersDepth(depthImage, level_width_1, level_height_2)
-                this.activity.printDistance("c_d", "c_p", center_distance / 1000.0f, level_width_1, level_height_2)
-                val head_distance = getMillimetersDepth(depthImage, level_width_1, level_height_1)
-                this.activity.printDistance("h_d", "h_p", head_distance / 1000.0f, level_width_1, level_height_1)
-                val left_arm_distance = getMillimetersDepth(depthImage, level_width_2_1, level_height_2)
-                this.activity.printDistance("a_l_d", "a_l_p", left_arm_distance / 1000.0f, level_width_2_1, level_height_2)
-                val right_arm_distance = getMillimetersDepth(depthImage, level_width_2_2, level_height_2)
-                this.activity.printDistance("a_r_d", "a_r_p", right_arm_distance / 1000.0f, level_width_2_2 , level_height_2)
-                val left_leg_distance = getMillimetersDepth(depthImage, level_width_2_1, level_height_3)
-                this.activity.printDistance("l_l_d", "l_l_p", left_leg_distance / 1000.0f, level_width_2_1 , level_height_3)
-                val right_leg_distance = getMillimetersDepth(depthImage, level_width_2_2, level_height_3)
-                this.activity.printDistance("l_r_d", "l_r_p", right_leg_distance / 1000.0f, level_width_2_2, level_height_3)
+//                val center_distance = getMillimetersDepth(depthImage, level_width_1, level_height_2)
+//                this.activity.printDistance("c_d", "c_p", center_distance / 1000.0f, level_width_1, level_height_2)
+//                val head_distance = getMillimetersDepth(depthImage, level_width_1, level_height_1)
+//                this.activity.printDistance("h_d", "h_p", head_distance / 1000.0f, level_width_1, level_height_1)
+//                val left_arm_distance = getMillimetersDepth(depthImage, level_width_2_1, level_height_2)
+//                this.activity.printDistance("a_l_d", "a_l_p", left_arm_distance / 1000.0f, level_width_2_1, level_height_2)
+//                val right_arm_distance = getMillimetersDepth(depthImage, level_width_2_2, level_height_2)
+//                this.activity.printDistance("a_r_d", "a_r_p", right_arm_distance / 1000.0f, level_width_2_2 , level_height_2)
+//                val left_leg_distance = getMillimetersDepth(depthImage, level_width_2_1, level_height_3)
+//                this.activity.printDistance("l_l_d", "l_l_p", left_leg_distance / 1000.0f, level_width_2_1 , level_height_3)
+//                val right_leg_distance = getMillimetersDepth(depthImage, level_width_2_2, level_height_3)
+//                this.activity.printDistance("l_r_d", "l_r_p", right_leg_distance / 1000.0f, level_width_2_2, level_height_3)
 
                 /***********/
+
+                /* TEST */
+                val testPoints = mutableListOf<String>()
+                testPoints.add("h0")
+                testPoints.add("cl0")
+                testPoints.add("cr6")
+                testPoints.add("cr5")
+                testPoints.add("cr4")
+                testPoints.add("cr3")
+                testPoints.add("cr7")
+
+                if (this.currentStatusGrid) {
+                    this.activity.runOnUiThread(java.lang.Runnable {
+                        this.activity.updateGrid(testPoints)
+                    })
+                }
+                /*------*/
 
                 depthImage.close()
             } catch (e: NotYetAvailableException) {
@@ -381,11 +394,19 @@ class HelloArRenderer(val activity: HelloArActivity) :
 
         /* -------------------------------------- */
 
-        // TODO: --------------- biagio ------------------
-        if (activity.depthSettings.drawCollisionPointsEnabled()) {
-            Log.i("HELLO_AR_RENDERER", "Checked Collision Points Checkbox")
+        /* ---------------- Biagio ---------------- */
+        if (activity.depthSettings.drawCollisionPointsEnabled() && !this.currentStatusGrid) {
+            this.activity.runOnUiThread(java.lang.Runnable {
+                this.activity.drawGrid()
+            })
+            this.currentStatusGrid = true
+        } else if (!activity.depthSettings.drawCollisionPointsEnabled() && this.currentStatusGrid) {
+            this.activity.runOnUiThread(java.lang.Runnable {
+                this.activity.hideGrid()
+            })
+            this.currentStatusGrid = false
         }
-        // -----------------------------------------------
+        /* ---------------------------------------- */
 
         // If not tracking, don't draw 3D objects.
         if (camera.trackingState == TrackingState.PAUSED) {
