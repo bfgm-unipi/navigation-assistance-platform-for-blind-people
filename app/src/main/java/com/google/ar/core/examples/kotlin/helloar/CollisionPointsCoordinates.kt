@@ -4,6 +4,7 @@ package com.google.ar.core.examples.kotlin.helloar
 class CollisionPointsCoordinates {
 
     public val distanceThreshold: Float = 1600f
+    public val pixelRadiusThreshold: Int = 5
 
     companion object {
         

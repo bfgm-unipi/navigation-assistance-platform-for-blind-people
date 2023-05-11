@@ -409,18 +409,43 @@ class HelloArRenderer(val activity: HelloArActivity) :
         }
     }
 
+    //------------------------ Fabrizio -----------------------------
+
     /** Obtain the depth in millimeters for [depthImage] at coordinates ([x], [y]). **/
     private fun getMillimetersDepth(depthImage: Image, x: Float, y: Float): Int {
+
+        // TODO
         // The depth image has a single plane, which stores depth for each
         // pixel as 16-bit unsigned integers.
         val xReal: Int = floor(x * depthImage.width).toInt()
         val yReal: Int = floor(y * depthImage.height).toInt()
         val plane = depthImage.planes[0]
-        val byteIndex = xReal * plane.pixelStride + yReal * plane.rowStride
         val buffer = plane.buffer.order(ByteOrder.nativeOrder())
-        val depthSample = buffer.getShort(byteIndex)
-        return depthSample.toInt()
+        var averageDistancePixelArea = 0f
+
+//        for (i in 0..pointsCoordinates.pixelRadiusThreshold) {
+
+//            if(i == 0){
+                val byteIndex = xReal *  plane.pixelStride + yReal * plane.rowStride
+//                averageDistancePixelArea += buffer.getShort(byteIndex)
+//            }
+
+//            val nordEstByteIndex = (xReal + i) * plane.rowStride + (yReal + i) * plane.pixelStride
+//            averageDistancePixelArea += buffer.getShort(nordEstByteIndex)
+//            val nordOvestByteIndex = (xReal - i) * plane.rowStride + (yReal + i) * plane.pixelStride
+//            averageDistancePixelArea += buffer.getShort(nordOvestByteIndex)
+//            val sudOvestByteIndex = (xReal - i) * plane.rowStride + (yReal - i) * plane.pixelStride
+//            averageDistancePixelArea += buffer.getShort(sudOvestByteIndex)
+//            val sudEstByteIndex = (xReal + i) * plane.rowStride + (yReal - i) * plane.pixelStride
+//            averageDistancePixelArea += buffer.getShort(sudEstByteIndex)
+
+//        }
+
+//        return floor(averageDistancePixelArea/(pointsCoordinates.pixelRadiusThreshold*4 + 1)).toInt()
+        return buffer.getShort(byteIndex).toInt()
     }
+
+    //------------------------ Fabrizio -----------------------------
 
     /** Checks if we detected at least one plane. */
     private fun Session.hasTrackingPlane() =
