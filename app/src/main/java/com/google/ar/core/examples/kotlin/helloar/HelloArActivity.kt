@@ -296,13 +296,36 @@ class HelloArActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
         imageView.layoutParams = layoutParams
     }
 
-    fun updateUserImages() {
-        // TODO: setup the update image resources
-        headImageView.setImageResource(R.drawable.head_red)
-        leftChestImageView.setImageResource(R.drawable.left_chest_red)
-        rightChestImageView.setImageResource(R.drawable.right_chest)
-        leftLegImageView.setImageResource(R.drawable.left_leg)
-        rightLegImageView.setImageResource(R.drawable.right_leg_red)
+    fun updateUserImages(listOfCloseBodyParts: MutableList<String>) {
+        // update head image resources
+        if (listOfCloseBodyParts.contains("head"))
+            headImageView.setImageResource(R.drawable.head_red)
+        else
+            headImageView.setImageResource(R.drawable.head)
+
+        // update left chest image
+        if (listOfCloseBodyParts.contains("chest_left"))
+            leftChestImageView.setImageResource(R.drawable.left_chest_red)
+        else
+            leftChestImageView.setImageResource(R.drawable.left_chest)
+
+        // update right chest image
+        if (listOfCloseBodyParts.contains("chest_right"))
+            rightChestImageView.setImageResource(R.drawable.right_chest_red)
+        else
+            rightChestImageView.setImageResource(R.drawable.right_chest)
+
+        // update left leg image
+        if (listOfCloseBodyParts.contains("leg_left"))
+            leftLegImageView.setImageResource(R.drawable.left_leg_red)
+        else
+            leftLegImageView.setImageResource(R.drawable.left_leg)
+
+        // update right leg image
+        if (listOfCloseBodyParts.contains("lef_right"))
+            rightLegImageView.setImageResource(R.drawable.right_leg_red)
+        else
+            rightLegImageView.setImageResource(R.drawable.right_leg)
     }
 
     fun hideUserImages() {
