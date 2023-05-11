@@ -20,7 +20,14 @@ import android.util.Log
 import android.widget.Toast
 import android.widget.ImageView
 import android.widget.RelativeLayout
+import android.content.Context
+import android.os.Build
+import android.os.VibrationEffect
+import android.os.Vibrator
+import android.widget.Button
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+import android.speech.tts.TextToSpeech
 import com.google.ar.core.Config
 import com.google.ar.core.Session
 import com.google.ar.core.examples.java.common.helpers.CameraPermissionHelper
@@ -33,13 +40,14 @@ import com.google.ar.core.exceptions.UnavailableApkTooOldException
 import com.google.ar.core.exceptions.UnavailableDeviceNotCompatibleException
 import com.google.ar.core.exceptions.UnavailableSdkTooOldException
 import com.google.ar.core.exceptions.UnavailableUserDeclinedInstallationException
+import java.util.Locale
 
 /**
  * This is a simple example that shows how to create an augmented reality (AR) application using the
  * ARCore API. The application will display any detected planes and will allow the user to tap on a
  * plane to place a 3D model.
  */
-class HelloArActivity : AppCompatActivity() {
+class HelloArActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
     companion object {
         private const val TAG = "HelloArActivity"
     }
@@ -62,6 +70,14 @@ class HelloArActivity : AppCompatActivity() {
 
     /* -------------------------------------- */
 
+    /* ------------------ GIANLUCA --------------- */
+
+    lateinit var vibrator: Vibrator
+    private var tts: TextToSpeech? = null
+
+    /* ------------------------------------------- */
+
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -104,6 +120,17 @@ class HelloArActivity : AppCompatActivity() {
 
         depthSettings.onCreate(this)
         setupUserImages()
+
+        /* ------------------ GIANLUCA --------------- */
+
+        vibrator = getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
+        var vibrationButton: Button = findViewById(R.id.vibration_button)
+        var speakButton: Button = findViewById(R.id.speak_button)
+        vibrationButton.setOnClickListener{ onVibrate() }
+        speakButton.setOnClickListener{ onSpeak("Hello, the Text to Speech service is online", 0.7f) }
+        tts = TextToSpeech(this, this)
+
+        /* ------------------------------------------- */
     }
 
     /* ---------------- Biagio ---------------- */
@@ -202,19 +229,6 @@ class HelloArActivity : AppCompatActivity() {
         rightChestImageView.setImageResource(R.drawable.right_chest)
         leftLegImageView.setImageResource(R.drawable.left_leg)
         rightLegImageView.setImageResource(R.drawable.right_leg)
-
-        /*/ setup their size
-        headImageView.layoutParams = ViewGroup.LayoutParams(
-            ViewGroup.LayoutParams.WRAP_CONTENT,
-            ViewGroup.LayoutParams.WRAP_CONTENT
-        )
-        val container = findViewById<View>(R.id.my_layout)
-        val params = headImageView.layoutParams as ViewGroup.LayoutParams
-        params.width = (container.width * 0.5).toInt()
-        params.height = (container.height * 0.75).toInt()
-        headImageView.layoutParams = params*/
-
-
     }
 
     fun drawUserImages() {
@@ -283,4 +297,69 @@ class HelloArActivity : AppCompatActivity() {
     }
 
     /* -------------------------------------- */
+
+    /* ------------------ GIANLUCA --------------- */
+    @RequiresApi(Build.VERSION_CODES.O)
+    fun startVibration(vibration_duration: Long, waiting_duration: Long, amplitude: Int) {
+        vibrator.vibrate(
+            VibrationEffect.createWaveform(
+                longArrayOf(vibration_duration, waiting_duration),
+                intArrayOf(amplitude, 0),
+                0
+            )
+        )
+    }
+
+    fun stopVibration() {
+        vibrator.cancel()
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    fun onVibrate() {
+        startVibration(500L, 100L, 255)
+        val vibrationButton: Button = findViewById(R.id.vibration_button)
+        if (vibrationButton.text == "start vibration") {
+            vibrationButton.text = "stop vibration"
+            startVibration(500L, 100L, 255)
+        }
+        else {
+            vibrationButton.text = "start vibration"
+            stopVibration()
+        }
+    }
+
+    override fun onInit(status: Int) {
+        // TTS service initialization
+        if (status == TextToSpeech.SUCCESS) {
+            val result = tts!!.setLanguage(Locale.ENGLISH)
+
+            if (result == TextToSpeech.LANG_MISSING_DATA || result == TextToSpeech.LANG_NOT_SUPPORTED) {
+                Log.e("TTS", "The Language not supported!")
+            }
+        }
+    }
+    fun onSpeak(text: String, speechRate: Float) {
+        tts!!.setSpeechRate(speechRate)
+        tts!!.speak(text, TextToSpeech.QUEUE_FLUSH, null,"")
+    }
+
+    public override fun onDestroy() {
+        // Shutdown TTS when
+        // activity is destroyed
+        if (tts != null) {
+            tts!!.stop()
+            tts!!.shutdown()
+        }
+        super.onDestroy()
+    }
+
+    fun warningVibration(indications: MutableList<String>){
+        // TODO
+    }
+
+    fun warningSpeech(indications: MutableList<String>){
+        // TODO
+    }
+
+    /* ------------------------------------------- */
 }

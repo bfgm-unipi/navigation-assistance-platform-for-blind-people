@@ -37,12 +37,25 @@
       android:src="@drawable/ic_settings"
       android:background="@android:color/transparent"/>
 
-  <ImageView
-      android:id="@+id/h0"
+  <Button
+      android:id="@+id/vibration_button"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:src="@android:drawable/presence_invisible"
-      android:visibility="invisible" />
+      android:layout_alignParentStart="true"
+      android:layout_alignParentBottom="true"
+      android:layout_marginStart="214dp"
+      android:layout_marginBottom="-5dp"
+      android:text="start vibration" />
+
+  <Button
+      android:id="@+id/speak_button"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_alignParentStart="true"
+      android:layout_alignParentBottom="true"
+      android:layout_marginStart="41dp"
+      android:layout_marginBottom="-4dp"
+      android:text="speak" />
 
   <ImageView
       android:id="@+id/user_head"
@@ -72,6 +85,13 @@
       android:id="@+id/user_left_leg"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
+      android:visibility="invisible" />
+
+  <ImageView
+      android:id="@+id/h0"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:src="@android:drawable/presence_invisible"
       android:visibility="invisible" />
 
   <ImageView
