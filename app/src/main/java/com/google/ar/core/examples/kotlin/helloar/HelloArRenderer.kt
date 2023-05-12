@@ -361,7 +361,7 @@ class HelloArRenderer(val activity: HelloArActivity) :
             }
         }
 
-        // -------------------- fabrizio -----------------------------
+        // -------------------------------------------------
 
         // Keep the screen unlocked while tracking, but allow it to lock when tracking stops.
         trackingStateHelper.updateKeepScreenOnFlag(camera.trackingState)
@@ -372,6 +372,21 @@ class HelloArRenderer(val activity: HelloArActivity) :
             // drawing possible leftover data from previous sessions if the texture is reused.
             backgroundRenderer.drawBackground(render)
         }
+
+        /* ------------------ GIANLUCA --------------- */
+
+        val indications = activity.elaborateIndications(listOfCloseBodyParts)
+        if (activity.depthSettings.enableVibrationWarningEnabled()) {
+            activity.warningVibration(indications)
+        }
+        else if (activity.vibratorIsActive)
+            activity.stopVibration()
+
+        if (activity.depthSettings.enableSpeechWarningsEnabled()) {
+            activity.warningSpeech(indications)
+        }
+
+        /* ------------------------------------------- */
 
         /* --------------- Matteo --------------- */
 
@@ -405,18 +420,6 @@ class HelloArRenderer(val activity: HelloArActivity) :
             }
         }
         /* ---------------------------------------- */
-
-        /* ------------------ GIANLUCA --------------- */
-
-        val indications = activity.elaborateIndications(listOfCloseBodyParts)
-        if (activity.depthSettings.enableVibrationWarningEnabled()) {
-            activity.warningVibration(indications)
-        }
-        if (activity.depthSettings.enableSpeechWarningsEnabled()) {
-            activity.warningSpeech(indications)
-        }
-
-        /* ------------------------------------------- */
 
         // If not tracking, don't draw 3D objects.
         if (camera.trackingState == TrackingState.PAUSED) {

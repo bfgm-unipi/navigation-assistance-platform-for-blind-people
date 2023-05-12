@@ -434,16 +434,19 @@ class HelloArActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
                 }
             } else {
                 if (key in indications) {
-                    if (value < indicationThreshold * 2)
+                    if (value < indicationThreshold * 2) {
                         value += 1
+                    }
                 } else {
-                    if (value > 0)
+                    if (value > 0) {
                         value -= 1
+                    }
                 }
             }
 
-            if (value > indicationThreshold)
+            if (value > indicationThreshold) {
                 newIndications.add(key)
+            }
 
             elem.setValue(value)
 
@@ -455,7 +458,7 @@ class HelloArActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
 
     @RequiresApi(Build.VERSION_CODES.O)
     fun warningVibration(indications: MutableList<String>){
-        Log.i("TEST_WARNING", indications.toString())
+        // Log.i("TEST_WARNING", indications.toString())
 
         if (indications.size > 0){
             if (indications.size == 1 && indications[0] == "free"){
@@ -471,8 +474,9 @@ class HelloArActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
 
     fun warningSpeech(indications: MutableList<String>){
 
-        if (indications.size == 0)
+        if (indications.size == 0) {
             return
+        }
 
         if ("free" !in indications) {
 
@@ -499,8 +503,9 @@ class HelloArActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
                     ( "head" in indications && "leg_right" in indications) -> text = "Right leg and head obstacle"
                 }
             }
-            else
+            else {
                 text = "Full body obstacle"
+            }
 
             if (ttsLastWarning != text){
                 speak(text, 0.7f)
@@ -508,8 +513,9 @@ class HelloArActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
             }
         }
         else{
-            if (ttsLastWarning != "")
+            if (ttsLastWarning != "") {
                 speak("No more obstacles", 0.7f)
+            }
             ttsLastWarning = ""
         }
     }
