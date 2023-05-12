@@ -79,7 +79,7 @@ class HelloArActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
     private var tts: TextToSpeech? = null
     var ttsLastWarning = ""
     val indicationThreshold = 100
-    var indicationsCounters = hashMapOf<String, Int>(
+    var indicationCounters = hashMapOf<String, Int>(
         "head" to 0,
         "chest_left" to 0,
         "chest_right" to 0,
@@ -408,8 +408,42 @@ class HelloArActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
         super.onDestroy()
     }
 
-    fun elaborateIndications(){
-        // TODO
+    fun elaborateIndications(indications: MutableList<String>): MutableList<String> {
+
+        val iterator = indicationCounters.iterator()
+        var newIndications = mutableListOf<String>()
+
+        while (iterator.hasNext()) {
+            val elem = iterator.next()
+            val key = elem.key
+            var value = elem.value
+            if (key == "free") {
+                if (indications.size == 0)
+                    value += 1
+                else
+                    value -= 1
+            } else {
+                if (key in indications) {
+                    value += 1
+                    if (key == "head")
+                        Log.i("TEST_ADD", "ADD TO " + key)
+                } else {
+                    value -= 1
+                    if (key == "head")
+                        Log.i("TEST_ADD", "SUB TO " + key)
+                    if (value < 0)
+                        value = 0
+                }
+            }
+
+            iterator.next().setValue(value)
+
+            if (value > indicationThreshold)
+                newIndications.add(key)
+
+            Log.i("TEST_INDICATIONS", key + ": " + value)
+        }
+        return newIndications
     }
 
     @RequiresApi(Build.VERSION_CODES.O)

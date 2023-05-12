@@ -408,11 +408,12 @@ class HelloArRenderer(val activity: HelloArActivity) :
 
         /* ------------------ GIANLUCA --------------- */
 
+        val indications = activity.elaborateIndications(listOfCloseBodyParts)
         if (activity.depthSettings.enableVibrationWarningEnabled()) {
-            activity.warningVibration(listOfCloseBodyParts)
+            activity.warningVibration(indications)
         }
         if (activity.depthSettings.enableSpeechWarningsEnabled()) {
-            activity.warningSpeech(listOfCloseBodyParts)
+            activity.warningSpeech(indications)
         }
 
         /* ------------------------------------------- */
