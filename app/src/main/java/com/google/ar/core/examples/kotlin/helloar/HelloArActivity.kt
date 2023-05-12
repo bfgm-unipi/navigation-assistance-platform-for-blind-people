@@ -78,7 +78,17 @@ class HelloArActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
     var vibratorIsActive = false
     private var tts: TextToSpeech? = null
     var ttsLastWarning = ""
-    var lastIndication = ""
+    val indicationThreshold = 100
+    var indicationsCounters = hashMapOf<String, Int>(
+        "head" to 0,
+        "chest_left" to 0,
+        "chest_right" to 0,
+        "leg_left" to 0,
+        "leg_right" to 0,
+        "free" to indicationThreshold
+
+    )
+
 
     /* ------------------------------------------- */
 
@@ -398,6 +408,10 @@ class HelloArActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
         super.onDestroy()
     }
 
+    fun elaborateIndications(){
+        // TODO
+    }
+
     @RequiresApi(Build.VERSION_CODES.O)
     fun warningVibration(indications: MutableList<String>){
         if (indications.size > 0 && !vibratorIsActive){
@@ -412,15 +426,6 @@ class HelloArActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
 
     fun warningSpeech(indications: MutableList<String>){
 
-        /*
-        "head"
-        "chest_left"
-        "chest_right"
-        "leg_left"
-        "lef_right"
-         */
-
-        // TODO add command 'no more obstacles' and add command counter
         if (indications.size > 0) {
 
             var text = "Something went wrong"
@@ -445,18 +450,16 @@ class HelloArActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
             else
                 text = "Full body obstacle"
 
-            if (text == lastIndication)
-                if (ttsLastWarning != text){
-                    speak(text, 0.7f)
-                    ttsLastWarning = text
-                }
 
-            lastIndication = text
+            if (ttsLastWarning != text){
+                speak(text, 0.7f)
+                ttsLastWarning = text
+            }
         }
         else{
+            if (ttsLastWarning != "")
+                speak("No more obstacles", 0.7f)
             ttsLastWarning = ""
-            lastIndication = ""
-           return
         }
 
     }
