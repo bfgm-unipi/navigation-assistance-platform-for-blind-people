@@ -174,9 +174,7 @@ class HelloArActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
             for (key in pointsCoordinates.getKeys()) {
                 val imageView = findViewById<ImageView>(resources.getIdentifier(key, "id", packageName))
                 val textView = findViewById<TextView>(resources.getIdentifier(key + "_distance", "id", packageName))
-                textView.text = "x: "+(pointsCoordinates.getCoordinatesByPointId(key)!!.first).toString() +"\n" +
-                                "y: "+ (pointsCoordinates.getCoordinatesByPointId(key)!!.second).toString() +"\n" +
-                                "d: "+ (points[key]?.first ?: 0.0f).toString() + "m"
+                textView.text = (points[key]?.first ?: 0.0f).toString() + "m"
 
                 if (points[key]?.second == true) {
                     imageView.setImageResource(android.R.drawable.presence_online)
