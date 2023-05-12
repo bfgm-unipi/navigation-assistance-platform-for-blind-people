@@ -39,7 +39,7 @@ class CollisionPointsCoordinates {
         private val bodyParts = mutableMapOf<String, Array<String>>()
         
         init{
-            bodyParts["head"] = arrayOf("h0", "h1", "h1")
+            bodyParts["head"] = arrayOf("h0", "h1", "h2")
             bodyParts["chest_left"] = arrayOf("cl0", "cl1", "cl2", "cl3", "cl4", "cl5", "cl6", "cl7")
             bodyParts["chest_right"] = arrayOf("cr0", "cr1", "cr2", "cr3", "cr4", "cr5", "cr6", "cr7")
             bodyParts["leg_left"] = arrayOf("ll0", "ll1")
