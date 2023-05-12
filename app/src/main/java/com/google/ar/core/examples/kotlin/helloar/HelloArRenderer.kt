@@ -429,35 +429,30 @@ class HelloArRenderer(val activity: HelloArActivity) :
     /** Obtain the depth in millimeters for [depthImage] at coordinates ([x], [y]). **/
     private fun getMillimetersDepth(depthImage: Image, x: Float, y: Float): Int {
 
-        // TODO
         // The depth image has a single plane, which stores depth for each
         // pixel as 16-bit unsigned integers.
-        val xReal: Int = floor(x * depthImage.width).toInt()
-        val yReal: Int = floor(y * depthImage.height).toInt()
+        val xReal: Int = floor(y * depthImage.width).toInt()
+        val yReal: Int = floor((1-x) * depthImage.height).toInt()
         val plane = depthImage.planes[0]
         val buffer = plane.buffer.order(ByteOrder.nativeOrder())
-        var averageDistancePixelArea = 0f
 
-//        for (i in 0..pointsCoordinates.pixelRadiusThreshold) {
+        var centerByteIndex = xReal *  plane.pixelStride + yReal * plane.rowStride
+        var averageDistancePixelArea = buffer.getShort(centerByteIndex).toFloat()
 
-//            if(i == 0){
-                val byteIndex = xReal *  plane.pixelStride + yReal * plane.rowStride
-//                averageDistancePixelArea += buffer.getShort(byteIndex)
-//            }
+        for (i in 1..pointsCoordinates.pixelRadiusThreshold) {
 
-//            val nordEstByteIndex = (xReal + i) * plane.rowStride + (yReal + i) * plane.pixelStride
-//            averageDistancePixelArea += buffer.getShort(nordEstByteIndex)
-//            val nordOvestByteIndex = (xReal - i) * plane.rowStride + (yReal + i) * plane.pixelStride
-//            averageDistancePixelArea += buffer.getShort(nordOvestByteIndex)
-//            val sudOvestByteIndex = (xReal - i) * plane.rowStride + (yReal - i) * plane.pixelStride
-//            averageDistancePixelArea += buffer.getShort(sudOvestByteIndex)
-//            val sudEstByteIndex = (xReal + i) * plane.rowStride + (yReal - i) * plane.pixelStride
-//            averageDistancePixelArea += buffer.getShort(sudEstByteIndex)
+            val nordEstByteIndex = (xReal + i) * plane.pixelStride + (yReal + i) * plane.rowStride
+            averageDistancePixelArea += buffer.getShort(nordEstByteIndex).toFloat()
+            val nordOvestByteIndex = (xReal - i) * plane.pixelStride + (yReal + i) * plane.rowStride
+            averageDistancePixelArea += buffer.getShort(nordOvestByteIndex).toFloat()
+            val sudOvestByteIndex = (xReal - i) * plane.pixelStride + (yReal - i) * plane.rowStride
+            averageDistancePixelArea += buffer.getShort(sudOvestByteIndex).toFloat()
+            val sudEstByteIndex = (xReal + i) * plane.pixelStride + (yReal - i) * plane.rowStride
+            averageDistancePixelArea += buffer.getShort(sudEstByteIndex).toFloat()
 
-//        }
+        }
 
-//        return floor(averageDistancePixelArea/(pointsCoordinates.pixelRadiusThreshold*4 + 1)).toInt()
-        return buffer.getShort(byteIndex).toInt()
+        return floor(averageDistancePixelArea/(pointsCoordinates.pixelRadiusThreshold*4 + 1)).toInt()
     }
 
     //------------------------ Fabrizio -----------------------------
