@@ -396,7 +396,7 @@ class HelloArRenderer(val activity: HelloArActivity) :
                 userImagesHidden = false
                 activity.runOnUiThread(java.lang.Runnable { activity.drawUserImages() })
             }
-            activity.runOnUiThread(java.lang.Runnable { activity.updateUserImages(listOfCloseBodyParts) })
+            activity.runOnUiThread(java.lang.Runnable { activity.updateUserImages(indications) })
         } else {
             if (!userImagesHidden) {
                 userImagesHidden = true

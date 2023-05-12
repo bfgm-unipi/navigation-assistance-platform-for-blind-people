@@ -78,7 +78,7 @@ class HelloArActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
     var vibratorIsActive = false
     private var tts: TextToSpeech? = null
     var ttsLastWarning = ""
-    val indicationThreshold = 5
+    val indicationThreshold = 10
     var indicationCounters = hashMapOf<String, Int>(
         "head" to 0,
         "chest_left" to 0,
@@ -306,6 +306,17 @@ class HelloArActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
     }
 
     fun updateUserImages(listOfCloseBodyParts: MutableList<String>) {
+        // check if there are no obstacles
+        if (listOfCloseBodyParts.size == 1 && listOfCloseBodyParts.contains("free")) {
+            headImageView.setImageResource(R.drawable.head)
+            leftChestImageView.setImageResource(R.drawable.left_chest)
+            rightChestImageView.setImageResource(R.drawable.right_chest)
+            leftLegImageView.setImageResource(R.drawable.left_leg)
+            rightLegImageView.setImageResource(R.drawable.right_leg)
+
+            return
+        }
+
         // update head image resources
         if (listOfCloseBodyParts.contains("head"))
             headImageView.setImageResource(R.drawable.head_red)
@@ -331,7 +342,7 @@ class HelloArActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
             leftLegImageView.setImageResource(R.drawable.left_leg)
 
         // update right leg image
-        if (listOfCloseBodyParts.contains("lef_right"))
+        if (listOfCloseBodyParts.contains("leg_right"))
             rightLegImageView.setImageResource(R.drawable.right_leg_red)
         else
             rightLegImageView.setImageResource(R.drawable.right_leg)
