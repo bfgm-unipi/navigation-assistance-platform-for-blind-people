@@ -86,7 +86,6 @@ class HelloArActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
         "leg_left" to 0,
         "leg_right" to 0,
         "free" to indicationThreshold
-
     )
 
 
@@ -410,18 +409,29 @@ class HelloArActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
 
     fun elaborateIndications(indications: MutableList<String>): MutableList<String> {
 
+        // Log.i("TEST_INDICATIONS", "---------------------------------")
+
         var iterator = indicationCounters.iterator()
         var newIndications = mutableListOf<String>()
 
+        // Log.i("TEST_INDICATIONS", indications.toString())
         while (iterator.hasNext()) {
+
             val elem = iterator.next()
             val key = elem.key
             var value = elem.value
+
             if (key == "free") {
-                if (indications.size == 0)
-                    value += 1
-                else
-                    value -= 1
+                if (indications.size == 0) {
+                    if (value < indicationThreshold * 2) {
+                        value += 1
+                    }
+                }
+                else {
+                    if (value > 0) {
+                        value -= 1
+                    }
+                }
             } else {
                 if (key in indications) {
                     if (value < indicationThreshold * 2)
@@ -432,15 +442,14 @@ class HelloArActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
                 }
             }
 
-            iterator.next().setValue(value)
-
             if (value > indicationThreshold)
                 newIndications.add(key)
 
             elem.setValue(value)
-            if (key == "head")
-                Log.i("TEST_INDICATIONS", key + ": " + value)
+
+            // Log.i("TEST_INDICATIONS", key + ": " + value + "(" + indications.size + ")")
         }
+        // Log.i("TEST_INDICATIONS", "---------------------------------")
         return newIndications
     }
 

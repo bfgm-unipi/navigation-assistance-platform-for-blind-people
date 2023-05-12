@@ -343,7 +343,7 @@ class HelloArRenderer(val activity: HelloArActivity) :
                         val bodyPart = key?.let { pointsCoordinates.getBodyPartByPointId(it) }
                         bodyPart?.let {
 
-                            if (!listOfCloseBodyParts.contains("nuovo elemento")) {
+                            if (!listOfCloseBodyParts.contains(it)) {
                                 listOfCloseBodyParts.add(it)
                             }
                         }
