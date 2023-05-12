@@ -78,7 +78,7 @@ class HelloArActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
     var vibratorIsActive = false
     private var tts: TextToSpeech? = null
     var ttsLastWarning = ""
-    val indicationThreshold = 100
+    val indicationThreshold = 5
     var indicationCounters = hashMapOf<String, Int>(
         "head" to 0,
         "chest_left" to 0,
@@ -410,7 +410,7 @@ class HelloArActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
 
     fun elaborateIndications(indications: MutableList<String>): MutableList<String> {
 
-        val iterator = indicationCounters.iterator()
+        var iterator = indicationCounters.iterator()
         var newIndications = mutableListOf<String>()
 
         while (iterator.hasNext()) {
@@ -424,15 +424,11 @@ class HelloArActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
                     value -= 1
             } else {
                 if (key in indications) {
-                    value += 1
-                    if (key == "head")
-                        Log.i("TEST_ADD", "ADD TO " + key)
+                    if (value < indicationThreshold * 2)
+                        value += 1
                 } else {
-                    value -= 1
-                    if (key == "head")
-                        Log.i("TEST_ADD", "SUB TO " + key)
-                    if (value < 0)
-                        value = 0
+                    if (value > 0)
+                        value -= 1
                 }
             }
 
@@ -441,7 +437,9 @@ class HelloArActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
             if (value > indicationThreshold)
                 newIndications.add(key)
 
-            Log.i("TEST_INDICATIONS", key + ": " + value)
+            elem.setValue(value)
+            if (key == "head")
+                Log.i("TEST_INDICATIONS", key + ": " + value)
         }
         return newIndications
     }
