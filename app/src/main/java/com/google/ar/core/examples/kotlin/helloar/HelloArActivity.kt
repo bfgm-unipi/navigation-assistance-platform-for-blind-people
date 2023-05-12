@@ -78,7 +78,16 @@ class HelloArActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
     var vibratorIsActive = false
     private var tts: TextToSpeech? = null
     var ttsLastWarning = ""
-    var lastIndication = ""
+    val indicationThreshold = 5
+    var indicationCounters = hashMapOf<String, Int>(
+        "head" to 0,
+        "chest_left" to 0,
+        "chest_right" to 0,
+        "leg_left" to 0,
+        "leg_right" to 0,
+        "free" to indicationThreshold
+    )
+
 
     /* ------------------------------------------- */
 
@@ -398,30 +407,78 @@ class HelloArActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
         super.onDestroy()
     }
 
+    fun elaborateIndications(indications: MutableList<String>): MutableList<String> {
+
+        // Log.i("TEST_INDICATIONS", "---------------------------------")
+
+        var iterator = indicationCounters.iterator()
+        var newIndications = mutableListOf<String>()
+
+        // Log.i("TEST_INDICATIONS", indications.toString())
+        while (iterator.hasNext()) {
+
+            val elem = iterator.next()
+            val key = elem.key
+            var value = elem.value
+
+            if (key == "free") {
+                if (indications.size == 0) {
+                    if (value < indicationThreshold * 2) {
+                        value += 1
+                    }
+                }
+                else {
+                    if (value > 0) {
+                        value -= 1
+                    }
+                }
+            } else {
+                if (key in indications) {
+                    if (value < indicationThreshold * 2) {
+                        value += 1
+                    }
+                } else {
+                    if (value > 0) {
+                        value -= 1
+                    }
+                }
+            }
+
+            if (value > indicationThreshold) {
+                newIndications.add(key)
+            }
+
+            elem.setValue(value)
+
+            // Log.i("TEST_INDICATIONS", key + ": " + value + "(" + indications.size + ")")
+        }
+        // Log.i("TEST_INDICATIONS", "---------------------------------")
+        return newIndications
+    }
+
     @RequiresApi(Build.VERSION_CODES.O)
     fun warningVibration(indications: MutableList<String>){
-        if (indications.size > 0 && !vibratorIsActive){
-            vibratorIsActive = true
-            startVibration(500L, 100L, 255)
-        }
-        else if (indications.size == 0){
-            vibratorIsActive = false
-            stopVibration()
+        // Log.i("TEST_WARNING", indications.toString())
+
+        if (indications.size > 0){
+            if (indications.size == 1 && indications[0] == "free"){
+                vibratorIsActive = false
+                stopVibration()
+            }
+            else if (!vibratorIsActive) {
+                vibratorIsActive = true
+                startVibration(500L, 100L, 255)
+            }
         }
     }
 
     fun warningSpeech(indications: MutableList<String>){
 
-        /*
-        "head"
-        "chest_left"
-        "chest_right"
-        "leg_left"
-        "lef_right"
-         */
+        if (indications.size == 0) {
+            return
+        }
 
-        // TODO add command 'no more obstacles' and add command counter
-        if (indications.size > 0) {
+        if ("free" !in indications) {
 
             var text = "Something went wrong"
 
@@ -440,26 +497,27 @@ class HelloArActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
                     ("leg_left" in indications && "leg_right" in indications) -> text = "Floor level obstacle"
                     ( "chest_left"  in indications && "leg_left" in indications ) -> text = "Full left obstacle"
                     ( "chest_right"  in indications && "leg_right" in indications ) -> text = "Full right obstacle"
+                    ( "head" in indications && "chest_left" in indications) -> text = "Left torso and head obstacle"
+                    ( "head" in indications && "chest_right" in indications) -> text = "Right torso and head obstacle"
+                    ( "head" in indications && "leg_left" in indications) -> text = "Left leg and head obstacle"
+                    ( "head" in indications && "leg_right" in indications) -> text = "Right leg and head obstacle"
                 }
             }
-            else
+            else {
                 text = "Full body obstacle"
+            }
 
-            if (text == lastIndication)
-                if (ttsLastWarning != text){
-                    speak(text, 0.7f)
-                    ttsLastWarning = text
-                }
-
-            lastIndication = text
+            if (ttsLastWarning != text){
+                speak(text, 0.7f)
+                ttsLastWarning = text
+            }
         }
         else{
+            if (ttsLastWarning != "") {
+                speak("No more obstacles", 0.7f)
+            }
             ttsLastWarning = ""
-            lastIndication = ""
-           return
         }
-
     }
-
     /* ------------------------------------------- */
 }
