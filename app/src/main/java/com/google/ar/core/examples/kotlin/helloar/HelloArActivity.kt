@@ -455,13 +455,17 @@ class HelloArActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
 
     @RequiresApi(Build.VERSION_CODES.O)
     fun warningVibration(indications: MutableList<String>){
-        if (indications.size > 0 && !vibratorIsActive){
-            vibratorIsActive = true
-            startVibration(500L, 100L, 255)
-        }
-        else if (indications.size == 0){
-            vibratorIsActive = false
-            stopVibration()
+        Log.i("TEST_WARNING", indications.toString())
+
+        if (indications.size > 0){
+            if (indications.size == 1 && indications[0] == "free"){
+                vibratorIsActive = false
+                stopVibration()
+            }
+            else if (!vibratorIsActive) {
+                vibratorIsActive = true
+                startVibration(500L, 100L, 255)
+            }
         }
     }
 
