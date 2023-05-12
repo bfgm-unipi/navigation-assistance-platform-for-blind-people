@@ -18,7 +18,9 @@ package com.google.ar.core.examples.kotlin.helloar
 import android.media.Image
 import android.opengl.GLES30
 import android.opengl.Matrix
+import android.os.Build
 import android.util.Log
+import androidx.annotation.RequiresApi
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
 import com.google.ar.core.Anchor
@@ -86,10 +88,14 @@ class HelloArRenderer(val activity: HelloArActivity) :
         val CUBEMAP_NUMBER_OF_IMPORTANCE_SAMPLES = 32
     }
 
+    private var collisionPointsHidden = true
+
     lateinit var render: SampleRender
     lateinit var planeRenderer: PlaneRenderer
     lateinit var backgroundRenderer: BackgroundRenderer
     lateinit var virtualSceneFramebuffer: Framebuffer
+    private var pointsCoordinates: CollisionPointsCoordinates = CollisionPointsCoordinates()
+
     var hasSetTextureNames = false
 
     // Point Cloud
@@ -123,6 +129,10 @@ class HelloArRenderer(val activity: HelloArActivity) :
 
     val displayRotationHelper = DisplayRotationHelper(activity)
     val trackingStateHelper = TrackingStateHelper(activity)
+
+    /* --------------- Matteo --------------- */
+    var userImagesHidden = true
+    /* -------------------------------------- */
 
     override fun onResume(owner: LifecycleOwner) {
         displayRotationHelper.onResume()
@@ -256,8 +266,14 @@ class HelloArRenderer(val activity: HelloArActivity) :
         virtualSceneFramebuffer.resize(width, height)
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onDrawFrame(render: SampleRender) {
         val session = session ?: return
+
+        // ---------------- fabrizio -----------------------------
+        val listOfClosePoints = mutableMapOf<String, Pair<Float, Boolean>>()
+        val listOfCloseBodyParts = mutableListOf<String>()
+        // ---------------- fabrizio -----------------------------
 
         // Texture names should only be set once on a GL thread unless they change. This is done during
         // onDrawFrame rather than onSurfaceCreated since the session is not guaranteed to have been
@@ -314,69 +330,136 @@ class HelloArRenderer(val activity: HelloArActivity) :
                 val depthImage = frame.acquireDepthImage16Bits()
                 backgroundRenderer.updateCameraDepthTexture(depthImage)
 
-                /***********/
-                val width: Int = depthImage.width
-                val height: Int = depthImage.height
+                // ---------------- fabrizio -----------------------------
+                for ((key, value) in pointsCoordinates.getPointCoordinatesMap()) {
+                    val coordinates = pointsCoordinates.getCoordinatesByPointId(key)
+                    val distance: Float=
+                        coordinates?.let {
+                            getMillimetersDepth(depthImage, it.first, it.second).toFloat()
+                        } ?: 0.0f
 
-                val level_height_1: Float = 1/4.0f
-                val level_height_2: Float = 1/2.0f
-                val level_height_3: Float = 3/4.0f
+                    if (distance <= pointsCoordinates.distanceThreshold){
+                        listOfClosePoints[key] = Pair(distance/1000, true)
+                        val bodyPart = key?.let { pointsCoordinates.getBodyPartByPointId(it) }
+                        bodyPart?.let {
 
-                val level_width_1: Float = 1/2.0f
-                val level_width_2_1: Float = 1/3.0f
-                val level_width_2_2: Float = 2/3.0f
-
-
-                val center_distance = getMillimetersDepth(depthImage, level_width_1, level_height_2)
-                this.activity.printDistance("c_d", "c_p", center_distance / 1000.0f, level_width_1, level_height_2)
-                val head_distance = getMillimetersDepth(depthImage, level_width_1, level_height_1)
-                this.activity.printDistance("h_d", "h_p", head_distance / 1000.0f, level_width_1, level_height_1)
-                val left_arm_distance = getMillimetersDepth(depthImage, level_width_2_1, level_height_2)
-                this.activity.printDistance("a_l_d", "a_l_p", left_arm_distance / 1000.0f, level_width_2_1, level_height_2)
-                val right_arm_distance = getMillimetersDepth(depthImage, level_width_2_2, level_height_2)
-                this.activity.printDistance("a_r_d", "a_r_p", right_arm_distance / 1000.0f, level_width_2_2 , level_height_2)
-                val left_leg_distance = getMillimetersDepth(depthImage, level_width_2_1, level_height_3)
-                this.activity.printDistance("l_l_d", "l_l_p", left_leg_distance / 1000.0f, level_width_2_1 , level_height_3)
-                val right_leg_distance = getMillimetersDepth(depthImage, level_width_2_2, level_height_3)
-                this.activity.printDistance("l_r_d", "l_r_p", right_leg_distance / 1000.0f, level_width_2_2, level_height_3)
-
-                /***********/
+                            if (!listOfCloseBodyParts.contains(it)) {
+                                listOfCloseBodyParts.add(it)
+                            }
+                        }
+                    }
+                    else{
+                        listOfClosePoints[key] = Pair(distance/1000, false)
+                    }
+                }
 
                 depthImage.close()
-            } catch (e: NotYetAvailableException) {
+            }
+            catch (e: NotYetAvailableException) {
                 // This normally means that depth data is not available yet. This is normal so we will not
                 // spam the logcat with this.
             }
         }
 
+        // -------------------------------------------------
+
         // Keep the screen unlocked while tracking, but allow it to lock when tracking stops.
         trackingStateHelper.updateKeepScreenOnFlag(camera.trackingState)
 
-        // Draw background
-        if (frame.timestamp != 0L) {
+        // Draw background       /* --------- Matteo --------- */
+        if (frame.timestamp != 0L && activity.depthSettings.drawCameraBackgroundEnabled()) {
             // Suppress rendering if the camera did not produce the first frame yet. This is to avoid
             // drawing possible leftover data from previous sessions if the texture is reused.
             backgroundRenderer.drawBackground(render)
         }
 
+        /* ------------------ GIANLUCA --------------- */
+
+        val indications = activity.elaborateIndications(listOfCloseBodyParts)
+        if (activity.depthSettings.enableVibrationWarningEnabled()) {
+            activity.warningVibration(indications)
+        }
+        else if (activity.vibratorIsActive)
+            activity.stopVibration()
+
+        if (activity.depthSettings.enableSpeechWarningsEnabled()) {
+            activity.warningSpeech(indications)
+        }
+
+        /* ------------------------------------------- */
+
+        /* --------------- Matteo --------------- */
+
+        // user images management
+        if (activity.depthSettings.drawUserCollisionStateEnabled()) {
+            if (userImagesHidden) {
+                userImagesHidden = false
+                activity.runOnUiThread(java.lang.Runnable { activity.drawUserImages() })
+            }
+            activity.runOnUiThread(java.lang.Runnable { activity.updateUserImages(indications) })
+        } else {
+            if (!userImagesHidden) {
+                userImagesHidden = true
+                activity.runOnUiThread(java.lang.Runnable { activity.hideUserImages() })
+            }
+        }
+
+        /* -------------------------------------- */
+
+        /* ---------------- Biagio ---------------- */
+        if (activity.depthSettings.drawCollisionPointsEnabled()) {
+            if (this.collisionPointsHidden) {
+                this.activity.runOnUiThread(java.lang.Runnable { this.activity.drawGrid() })
+                this.collisionPointsHidden = false
+            }
+            this.activity.runOnUiThread(java.lang.Runnable { this.activity.updateGrid(listOfClosePoints) })
+        } else {
+            if (!this.collisionPointsHidden) {
+                this.activity.runOnUiThread(java.lang.Runnable { this.activity.hideGrid() })
+                this.collisionPointsHidden = true
+            }
+        }
+        /* ---------------------------------------- */
+
         // If not tracking, don't draw 3D objects.
         if (camera.trackingState == TrackingState.PAUSED) {
             return
         }
+
     }
+
+    //------------------------ Fabrizio -----------------------------
 
     /** Obtain the depth in millimeters for [depthImage] at coordinates ([x], [y]). **/
     private fun getMillimetersDepth(depthImage: Image, x: Float, y: Float): Int {
+
         // The depth image has a single plane, which stores depth for each
         // pixel as 16-bit unsigned integers.
-        val xReal: Int = floor(x * depthImage.width).toInt()
-        val yReal: Int = floor(y * depthImage.height).toInt()
+        val xReal: Int = floor(y * depthImage.width).toInt()
+        val yReal: Int = floor((1-x) * depthImage.height).toInt()
         val plane = depthImage.planes[0]
-        val byteIndex = xReal * plane.pixelStride + yReal * plane.rowStride
         val buffer = plane.buffer.order(ByteOrder.nativeOrder())
-        val depthSample = buffer.getShort(byteIndex)
-        return depthSample.toInt()
+
+        var centerByteIndex = xReal *  plane.pixelStride + yReal * plane.rowStride
+        var averageDistancePixelArea = buffer.getShort(centerByteIndex).toFloat()
+
+        for (i in 1..pointsCoordinates.pixelRadiusThreshold) {
+
+            val nordEstByteIndex = (xReal + i) * plane.pixelStride + (yReal + i) * plane.rowStride
+            averageDistancePixelArea += buffer.getShort(nordEstByteIndex).toFloat()
+            val nordOvestByteIndex = (xReal - i) * plane.pixelStride + (yReal + i) * plane.rowStride
+            averageDistancePixelArea += buffer.getShort(nordOvestByteIndex).toFloat()
+            val sudOvestByteIndex = (xReal - i) * plane.pixelStride + (yReal - i) * plane.rowStride
+            averageDistancePixelArea += buffer.getShort(sudOvestByteIndex).toFloat()
+            val sudEstByteIndex = (xReal + i) * plane.pixelStride + (yReal - i) * plane.rowStride
+            averageDistancePixelArea += buffer.getShort(sudEstByteIndex).toFloat()
+
+        }
+
+        return floor(averageDistancePixelArea/(pointsCoordinates.pixelRadiusThreshold*4 + 1)).toInt()
     }
+
+    //------------------------ Fabrizio -----------------------------
 
     /** Checks if we detected at least one plane. */
     private fun Session.hasTrackingPlane() =

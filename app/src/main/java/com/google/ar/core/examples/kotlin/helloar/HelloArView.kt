@@ -95,7 +95,14 @@ class HelloArView(val activity: HelloArActivity) : DefaultLifecycleObserver {
         val checkboxes =
             booleanArrayOf(
                 activity.depthSettings.useDepthForOcclusion(),
-                activity.depthSettings.depthColorVisualizationEnabled()
+                activity.depthSettings.depthColorVisualizationEnabled(),
+                /* --------------- Matteo --------------- */
+                activity.depthSettings.drawCameraBackgroundEnabled(),
+                activity.depthSettings.drawUserCollisionStateEnabled(),
+                activity.depthSettings.drawCollisionPointsEnabled(),
+                activity.depthSettings.enableVibrationWarningEnabled(),
+                activity.depthSettings.enableSpeechWarningsEnabled()
+                /* -------------------------------------- */
             )
         if (session.isDepthModeSupported(Config.DepthMode.AUTOMATIC)) {
             // With depth support, the user can select visualization options.
@@ -108,6 +115,13 @@ class HelloArView(val activity: HelloArActivity) : DefaultLifecycleObserver {
                 .setPositiveButton(R.string.done) { _, _ ->
                     activity.depthSettings.setUseDepthForOcclusion(checkboxes[0])
                     activity.depthSettings.setDepthColorVisualizationEnabled(checkboxes[1])
+                    /* --------------- Matteo --------------- */
+                    activity.depthSettings.setDrawCameraBackgroundEnabled(checkboxes[2])
+                    activity.depthSettings.setDrawUserCollisionStateEnabled(checkboxes[3])
+                    activity.depthSettings.setDrawCollisionPointsEnabled(checkboxes[4])
+                    activity.depthSettings.setEnableVibrationWarningEnabled(checkboxes[5])
+                    activity.depthSettings.setEnableSpeechWarningsEnabled(checkboxes[6])
+                    /* -------------------------------------- */
                 }
                 .show()
         } else {

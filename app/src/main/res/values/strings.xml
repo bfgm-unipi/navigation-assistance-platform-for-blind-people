@@ -25,6 +25,13 @@
   <string-array translatable="false" name="depth_options_array">
     <item>Enable depth</item>
     <item>Show depth map</item>
+    <!-- Matteo -->
+    <item>Show Camera Background</item>
+    <item>Show User Collision State</item>
+    <item>Show Collision Points</item>
+    <item>Enable Vibration Warning</item>
+    <item>Enable Speech Warnings</item>
+    <!-- ****** -->
   </string-array>
   <string translatable="false" name="options_title_instant_placement">Instant Placement options</string>
   <string-array translatable="false" name="instant_placement_options_array">
