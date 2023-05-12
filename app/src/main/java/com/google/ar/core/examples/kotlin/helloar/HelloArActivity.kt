@@ -471,7 +471,10 @@ class HelloArActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
 
     fun warningSpeech(indications: MutableList<String>){
 
-        if (indications.size > 0) {
+        if (indications.size == 0)
+            return
+
+        if ("free" !in indications) {
 
             var text = "Something went wrong"
 
@@ -490,11 +493,14 @@ class HelloArActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
                     ("leg_left" in indications && "leg_right" in indications) -> text = "Floor level obstacle"
                     ( "chest_left"  in indications && "leg_left" in indications ) -> text = "Full left obstacle"
                     ( "chest_right"  in indications && "leg_right" in indications ) -> text = "Full right obstacle"
+                    ( "head" in indications && "chest_left" in indications) -> text = "Left torso and head obstacle"
+                    ( "head" in indications && "chest_right" in indications) -> text = "Right torso and head obstacle"
+                    ( "head" in indications && "leg_left" in indications) -> text = "Left leg and head obstacle"
+                    ( "head" in indications && "leg_right" in indications) -> text = "Right leg and head obstacle"
                 }
             }
             else
                 text = "Full body obstacle"
-
 
             if (ttsLastWarning != text){
                 speak(text, 0.7f)
@@ -506,8 +512,6 @@ class HelloArActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
                 speak("No more obstacles", 0.7f)
             ttsLastWarning = ""
         }
-
     }
-
     /* ------------------------------------------- */
 }
