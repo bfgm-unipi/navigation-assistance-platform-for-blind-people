@@ -338,7 +338,7 @@ class HelloArRenderer(val activity: HelloArActivity) :
                             getMillimetersDepth(depthImage, it.first, it.second).toFloat()
                         } ?: 0.0f
 
-                    if (distance <= pointsCoordinates.distanceThreshold){
+                    if ((distance > 0) && (distance <= pointsCoordinates.distanceThreshold)){
                         listOfClosePoints[key] = Pair(distance/1000, true)
                         val bodyPart = key?.let { pointsCoordinates.getBodyPartByPointId(it) }
                         bodyPart?.let {
