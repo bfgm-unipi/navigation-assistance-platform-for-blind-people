@@ -3,7 +3,7 @@ package com.google.ar.core.examples.kotlin.helloar
 // -------------------- fabrizio ---------------------------------
 class CollisionPointsCoordinates {
 
-    public val distanceThreshold: Float = 1600f
+    public var distanceThreshold: Float = 1500f
     public val pixelRadiusThreshold: Int = 5
 
     companion object {

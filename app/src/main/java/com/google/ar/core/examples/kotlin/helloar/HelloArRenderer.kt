@@ -96,6 +96,10 @@ class HelloArRenderer(val activity: HelloArActivity) :
     lateinit var virtualSceneFramebuffer: Framebuffer
     private var pointsCoordinates: CollisionPointsCoordinates = CollisionPointsCoordinates()
 
+    public fun setThreshold(threshold: Float) {
+        pointsCoordinates.distanceThreshold = threshold
+    }
+
     var hasSetTextureNames = false
 
     // Point Cloud

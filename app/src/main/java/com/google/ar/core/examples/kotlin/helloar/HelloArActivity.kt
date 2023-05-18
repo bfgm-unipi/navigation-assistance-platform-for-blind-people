@@ -138,10 +138,10 @@ class HelloArActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
         /* ------------------ GIANLUCA --------------- */
 
         vibrator = getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
-        var vibrationButton: Button = findViewById(R.id.vibration_button)
-        var speakButton: Button = findViewById(R.id.speak_button)
-        vibrationButton.setOnClickListener{ onVibrate() }
-        speakButton.setOnClickListener{ onSpeak() }
+        var vibrationButton: Button = findViewById(R.id.th_up)
+        var speakButton: Button = findViewById(R.id.th_down)
+        vibrationButton.setOnClickListener{ onThresholdUp() }
+        speakButton.setOnClickListener{ onThresholdDown() }
         tts = TextToSpeech(this, this)
 
         /* ------------------------------------------- */
@@ -375,17 +375,19 @@ class HelloArActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
         vibrator.cancel()
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
-    fun onVibrate() {
-        startVibration(500L, 100L, 255)
-        val vibrationButton: Button = findViewById(R.id.vibration_button)
-        if (vibrationButton.text == "start vibration") {
-            vibrationButton.text = "stop vibration"
-            startVibration(500L, 100L, 255)
-        }
-        else {
-            vibrationButton.text = "start vibration"
-            stopVibration()
+    fun onThresholdUp() {
+        val text: TextView = findViewById(R.id.threshold)
+        val threshold: Float = text.text.toString().toFloat() + 500
+        text.text = threshold.toString()
+        renderer.setThreshold(threshold)
+    }
+
+    fun onThresholdDown() {
+        val text: TextView = findViewById(R.id.threshold)
+        val threshold: Float = text.text.toString().toFloat() - 500
+        if (threshold > 0) {
+            text.text = threshold.toString()
+            renderer.setThreshold(threshold)
         }
     }
 
@@ -403,9 +405,6 @@ class HelloArActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
     fun speak(text: String, speechRate: Float) {
         tts!!.setSpeechRate(speechRate)
         tts!!.speak(text, TextToSpeech.QUEUE_FLUSH, null,"")
-    }
-    fun onSpeak() {
-       speak("Hello, the Text to Speech service is online", 0.7f)
     }
 
     public override fun onDestroy() {

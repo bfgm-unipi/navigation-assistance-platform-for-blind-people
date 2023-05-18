@@ -16,50 +16,50 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
     android:id="@+id/my_layout"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
     tools:context="com.google.ar.core.examples.java.helloar.HelloArActivity">
 
   <android.opengl.GLSurfaceView
       android:id="@+id/surfaceview"
       android:layout_width="fill_parent"
       android:layout_height="fill_parent"
-      android:layout_gravity="top"/>
+      android:layout_gravity="top" />
 
   <ImageButton
       android:id="@+id/settings_button"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:layout_alignParentEnd="true"
       android:layout_alignParentTop="true"
+      android:layout_alignParentEnd="true"
       android:layout_margin="25dp"
-      android:src="@drawable/ic_settings"
-      android:background="@android:color/transparent"/>
+      android:background="@android:color/transparent"
+      android:src="@drawable/ic_settings" />
 
   <Button
-      android:id="@+id/vibration_button"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:layout_alignParentStart="true"
+      android:id="@+id/th_up"
+      android:layout_width="100dp"
+      android:layout_height="40dp"
+      android:layout_alignParentEnd="true"
       android:layout_alignParentBottom="true"
-      android:layout_marginStart="151dp"
-      android:layout_marginBottom="0dp"
-      android:text="start vibration"
-      android:visibility="invisible"
-      tools:visibility="invisible" />
+      android:layout_marginEnd="40dp"
+      android:layout_marginBottom="10dp"
+      android:text="+"
+      android:visibility="visible"
+      tools:visibility="visible" />
 
   <Button
-      android:id="@+id/speak_button"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
+      android:id="@+id/th_down"
+      android:layout_width="100dp"
+      android:layout_height="40dp"
       android:layout_alignParentStart="true"
       android:layout_alignParentBottom="true"
-      android:layout_marginStart="41dp"
-      android:layout_marginBottom="-4dp"
-      android:text="speak"
-      android:visibility="invisible"
-      tools:visibility="invisible" />
+      android:layout_marginStart="40dp"
+      android:layout_marginBottom="10dp"
+      android:text="-"
+      android:visibility="visible"
+      tools:visibility="visible" />
 
   <ImageView
       android:id="@+id/user_head"
@@ -389,5 +389,16 @@
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:visibility="invisible" />
+
+  <TextView
+      android:id="@+id/threshold"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_alignParentStart="true"
+      android:layout_alignParentBottom="true"
+      android:layout_marginStart="165dp"
+      android:layout_marginBottom="20dp"
+      android:text="1500"
+      android:textSize="20sp" />
 
 </RelativeLayout>
