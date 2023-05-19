@@ -164,7 +164,11 @@ class HelloArActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
 
             val textView = findViewById<TextView>(resources.getIdentifier(key + "_distance", "id", packageName))
             textView.translationX = pointsCoordinates.getCoordinatesByPointId(key)!!.first * screenWidth.toFloat() - pixelsToTranslate/scale
-            textView.translationY = pointsCoordinates.getCoordinatesByPointId(key)!!.second * screenHeight.toFloat() + pixelsToTranslate/scale
+            if (key == "h1") {
+                textView.translationY = pointsCoordinates.getCoordinatesByPointId(key)!!.second * screenHeight.toFloat() - pixelsToTranslate/scale
+            } else {
+                textView.translationY = pointsCoordinates.getCoordinatesByPointId(key)!!.second * screenHeight.toFloat() + pixelsToTranslate/scale
+            }
             textView.visibility = TextView.VISIBLE
         }
     }
