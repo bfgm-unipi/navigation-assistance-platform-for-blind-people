@@ -68,25 +68,25 @@
       android:visibility="invisible" />
 
   <ImageView
-      android:id="@+id/user_left_chest"
+      android:id="@+id/user_left_torso"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:visibility="invisible" />
 
   <ImageView
-      android:id="@+id/user_right_chest"
+      android:id="@+id/user_right_torso"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:visibility="invisible" />
 
   <ImageView
-      android:id="@+id/user_right_leg"
+      android:id="@+id/user_right_floor"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:visibility="invisible" />
 
   <ImageView
-      android:id="@+id/user_left_leg"
+      android:id="@+id/user_left_floor"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:visibility="invisible" />

@@ -15,7 +15,7 @@ class CollisionPointsCoordinates {
             pointCoordinates["h0"] = Pair(10/24.0f, 1/8.0f)
             pointCoordinates["h1"] = Pair(12/24.0f, 1/8.0f)
             pointCoordinates["h2"] = Pair(14/24.0f, 1/8.0f)
-            // chest left points
+            // torso left points
             pointCoordinates["cl0"] = Pair(6/24.0f, 2/8.0f)
             pointCoordinates["cl1"] = Pair(12/24.0f, 2/8.0f)
             pointCoordinates["cl2"] = Pair(9/24.0f, 3/8.0f)
@@ -24,7 +24,7 @@ class CollisionPointsCoordinates {
             pointCoordinates["cl5"] = Pair(9/24.0f, 5/8.0f)
             pointCoordinates["cl6"] = Pair(6/24.0f, 6/8.0f)
             pointCoordinates["cl7"] = Pair(12/24.0f, 6/8.0f)
-            // chest right points
+            // torso right points
             pointCoordinates["cr0"] = Pair(12/24.0f, 2/8.0f)
             pointCoordinates["cr1"] = Pair(18/24.0f, 2/8.0f)
             pointCoordinates["cr2"] = Pair(15/24.0f, 3/8.0f)
@@ -33,10 +33,10 @@ class CollisionPointsCoordinates {
             pointCoordinates["cr5"] = Pair(15/24.0f, 5/8.0f)
             pointCoordinates["cr6"] = Pair(12/24.0f, 6/8.0f)
             pointCoordinates["cr7"] = Pair(18/24.0f, 6/8.0f)
-            // leg left
+            // floor left
             pointCoordinates["ll0"] = Pair(6/24.0f, 7/8.0f)
             pointCoordinates["ll1"] = Pair(12/24.0f, 7/8.0f)
-            // leg right
+            // floor right
             pointCoordinates["lr0"] = Pair(12/24.0f, 7/8.0f)
             pointCoordinates["lr1"] = Pair(18/24.0f, 7/8.0f)
         }
@@ -45,10 +45,10 @@ class CollisionPointsCoordinates {
         
         init{
             bodyParts["head"] = arrayOf("h0", "h1", "h2")
-            bodyParts["chest_left"] = arrayOf("cl0", "cl1", "cl2", "cl3", "cl4", "cl5", "cl6", "cl7")
-            bodyParts["chest_right"] = arrayOf("cr0", "cr1", "cr2", "cr3", "cr4", "cr5", "cr6", "cr7")
-            bodyParts["leg_left"] = arrayOf("ll0", "ll1")
-            bodyParts["leg_right"] = arrayOf("lr0", "lr1")
+            bodyParts["torso_left"] = arrayOf("cl0", "cl1", "cl2", "cl3", "cl4", "cl5", "cl6", "cl7")
+            bodyParts["torso_right"] = arrayOf("cr0", "cr1", "cr2", "cr3", "cr4", "cr5", "cr6", "cr7")
+            bodyParts["floor_left"] = arrayOf("ll0", "ll1")
+            bodyParts["floor_right"] = arrayOf("lr0", "lr1")
         }
     }
 

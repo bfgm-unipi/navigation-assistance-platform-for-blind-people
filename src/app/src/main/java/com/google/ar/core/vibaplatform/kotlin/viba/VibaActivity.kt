@@ -64,10 +64,10 @@ class VibaActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
 
     // image view references
     private lateinit var headImageView: ImageView
-    private lateinit var leftChestImageView: ImageView
-    private lateinit var rightChestImageView: ImageView
-    private lateinit var leftLegImageView: ImageView
-    private lateinit var rightLegImageView: ImageView
+    private lateinit var leftTorsoImageView: ImageView
+    private lateinit var rightTorsoImageView: ImageView
+    private lateinit var leftFloorImageView: ImageView
+    private lateinit var rightFloorImageView: ImageView
 
     /* -------------------------------------- */
 
@@ -80,10 +80,10 @@ class VibaActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
     val indicationThreshold = 10
     var indicationCounters = hashMapOf<String, Int>(
         "head" to 0,
-        "chest_left" to 0,
-        "chest_right" to 0,
-        "leg_left" to 0,
-        "leg_right" to 0,
+        "torso_left" to 0,
+        "torso_right" to 0,
+        "floor_left" to 0,
+        "floor_right" to 0,
         "free" to indicationThreshold
     )
 
@@ -248,17 +248,17 @@ class VibaActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
     private fun setupUserImages() {
         // retrieve all the references
         headImageView = findViewById(R.id.user_head)
-        leftChestImageView = findViewById(R.id.user_left_chest)
-        rightChestImageView = findViewById(R.id.user_right_chest)
-        leftLegImageView  = findViewById(R.id.user_left_leg)
-        rightLegImageView = findViewById(R.id.user_right_leg)
+        leftTorsoImageView = findViewById(R.id.user_left_torso)
+        rightTorsoImageView = findViewById(R.id.user_right_torso)
+        leftFloorImageView  = findViewById(R.id.user_left_floor)
+        rightFloorImageView = findViewById(R.id.user_right_floor)
 
         // setup the image resources
         headImageView.setImageResource(R.drawable.head)
-        leftChestImageView.setImageResource(R.drawable.left_chest)
-        rightChestImageView.setImageResource(R.drawable.right_chest)
-        leftLegImageView.setImageResource(R.drawable.left_leg)
-        rightLegImageView.setImageResource(R.drawable.right_leg)
+        leftTorsoImageView.setImageResource(R.drawable.left_torso)
+        rightTorsoImageView.setImageResource(R.drawable.right_torso)
+        leftFloorImageView.setImageResource(R.drawable.left_floor)
+        rightFloorImageView.setImageResource(R.drawable.right_floor)
     }
 
     fun drawUserImages() {
@@ -271,32 +271,32 @@ class VibaActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
         headImageView.post {
             headImageView.translationX = (screenWidth / 2.0f)  - (headImageView.width / 2.0f)
             headImageView.translationY = screenHeight * 2 / 8.0f
-            leftChestImageView.translationX  = (screenWidth / 2.0f)  - (leftChestImageView.width)
-            leftChestImageView.translationY  = headImageView.translationY + headImageView.height
-            rightChestImageView.translationX = (screenWidth / 2.0f)
-            rightChestImageView.translationY = leftChestImageView.translationY
-            leftLegImageView.translationX  = (screenWidth / 2.0f)  - (leftLegImageView.width)
-            leftLegImageView.translationY  = leftChestImageView.translationY + leftChestImageView.height
-            rightLegImageView.translationX = (screenWidth / 2.0f)
-            rightLegImageView.translationY = leftLegImageView.translationY
+            leftTorsoImageView.translationX  = (screenWidth / 2.0f)  - (leftTorsoImageView.width)
+            leftTorsoImageView.translationY  = headImageView.translationY + headImageView.height
+            rightTorsoImageView.translationX = (screenWidth / 2.0f)
+            rightTorsoImageView.translationY = leftTorsoImageView.translationY
+            leftFloorImageView.translationX  = (screenWidth / 2.0f)  - (leftFloorImageView.width)
+            leftFloorImageView.translationY  = leftTorsoImageView.translationY + leftTorsoImageView.height
+            rightFloorImageView.translationX = (screenWidth / 2.0f)
+            rightFloorImageView.translationY = leftFloorImageView.translationY
         }
 
         // set the images visible
         headImageView.visibility = ImageView.VISIBLE
-        leftChestImageView.visibility  = ImageView.VISIBLE
-        rightChestImageView.visibility = ImageView.VISIBLE
-        leftLegImageView.visibility  = ImageView.VISIBLE
-        rightLegImageView.visibility = ImageView.VISIBLE
+        leftTorsoImageView.visibility  = ImageView.VISIBLE
+        rightTorsoImageView.visibility = ImageView.VISIBLE
+        leftFloorImageView.visibility  = ImageView.VISIBLE
+        rightFloorImageView.visibility = ImageView.VISIBLE
     }
 
     fun updateUserImages(listOfCloseBodyParts: MutableList<String>) {
         // check if there are no obstacles
         if (listOfCloseBodyParts.size == 1 && listOfCloseBodyParts.contains("free")) {
             headImageView.setImageResource(R.drawable.head)
-            leftChestImageView.setImageResource(R.drawable.left_chest)
-            rightChestImageView.setImageResource(R.drawable.right_chest)
-            leftLegImageView.setImageResource(R.drawable.left_leg)
-            rightLegImageView.setImageResource(R.drawable.right_leg)
+            leftTorsoImageView.setImageResource(R.drawable.left_torso)
+            rightTorsoImageView.setImageResource(R.drawable.right_torso)
+            leftFloorImageView.setImageResource(R.drawable.left_floor)
+            rightFloorImageView.setImageResource(R.drawable.right_floor)
 
             return
         }
@@ -307,38 +307,38 @@ class VibaActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
         else
             headImageView.setImageResource(R.drawable.head)
 
-        // update left chest image
-        if (listOfCloseBodyParts.contains("chest_left"))
-            leftChestImageView.setImageResource(R.drawable.left_chest_red)
+        // update left torso image
+        if (listOfCloseBodyParts.contains("torso_left"))
+            leftTorsoImageView.setImageResource(R.drawable.left_torso_red)
         else
-            leftChestImageView.setImageResource(R.drawable.left_chest)
+            leftTorsoImageView.setImageResource(R.drawable.left_torso)
 
-        // update right chest image
-        if (listOfCloseBodyParts.contains("chest_right"))
-            rightChestImageView.setImageResource(R.drawable.right_chest_red)
+        // update right torso image
+        if (listOfCloseBodyParts.contains("torso_right"))
+            rightTorsoImageView.setImageResource(R.drawable.right_torso_red)
         else
-            rightChestImageView.setImageResource(R.drawable.right_chest)
+            rightTorsoImageView.setImageResource(R.drawable.right_torso)
 
-        // update left leg image
-        if (listOfCloseBodyParts.contains("leg_left"))
-            leftLegImageView.setImageResource(R.drawable.left_leg_red)
+        // update left floor image
+        if (listOfCloseBodyParts.contains("floor_left"))
+            leftFloorImageView.setImageResource(R.drawable.left_floor_red)
         else
-            leftLegImageView.setImageResource(R.drawable.left_leg)
+            leftFloorImageView.setImageResource(R.drawable.left_floor)
 
-        // update right leg image
-        if (listOfCloseBodyParts.contains("leg_right"))
-            rightLegImageView.setImageResource(R.drawable.right_leg_red)
+        // update right floor image
+        if (listOfCloseBodyParts.contains("floor_right"))
+            rightFloorImageView.setImageResource(R.drawable.right_floor_red)
         else
-            rightLegImageView.setImageResource(R.drawable.right_leg)
+            rightFloorImageView.setImageResource(R.drawable.right_floor)
     }
 
     fun hideUserImages() {
         // set the images invisible
         headImageView.visibility = ImageView.INVISIBLE
-        leftChestImageView.visibility  = ImageView.INVISIBLE
-        rightChestImageView.visibility = ImageView.INVISIBLE
-        leftLegImageView.visibility  = ImageView.INVISIBLE
-        rightLegImageView.visibility = ImageView.INVISIBLE
+        leftTorsoImageView.visibility  = ImageView.INVISIBLE
+        rightTorsoImageView.visibility = ImageView.INVISIBLE
+        leftFloorImageView.visibility  = ImageView.INVISIBLE
+        rightFloorImageView.visibility = ImageView.INVISIBLE
     }
 
     /* -------------------------------------- */
@@ -479,22 +479,22 @@ class VibaActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
             if (indications.size == 1) {
                 when (indications[0]) {
                     "head" -> text = "Head level obstacle"
-                    "chest_left" -> text = "Left torso level obstacle"
-                    "chest_right" -> text = "Right torso level obstacle"
-                    "leg_left" -> text = "Left floor level obstacle"
-                    "leg_right" -> text = "Right floor level obstacle"
+                    "torso_left" -> text = "Left torso level obstacle"
+                    "torso_right" -> text = "Right torso level obstacle"
+                    "floor_left" -> text = "Left floor level obstacle"
+                    "floor_right" -> text = "Right floor level obstacle"
                 }
             }
             else if (indications.size == 2) {
                 when {
-                    ( "chest_left"  in indications && "chest_right" in indications ) -> text = "Torso level obstacle"
-                    ("leg_left" in indications && "leg_right" in indications) -> text = "Floor level obstacle"
-                    ( "chest_left"  in indications && "leg_left" in indications ) -> text = "Full left obstacle"
-                    ( "chest_right"  in indications && "leg_right" in indications ) -> text = "Full right obstacle"
-                    ( "head" in indications && "chest_left" in indications) -> text = "Left torso and head obstacle"
-                    ( "head" in indications && "chest_right" in indications) -> text = "Right torso and head obstacle"
-                    ( "head" in indications && "leg_left" in indications) -> text = "Left leg and head obstacle"
-                    ( "head" in indications && "leg_right" in indications) -> text = "Right leg and head obstacle"
+                    ( "torso_left"  in indications && "torso_right" in indications ) -> text = "Torso level obstacle"
+                    ("floor_left" in indications && "floor_right" in indications) -> text = "Floor level obstacle"
+                    ( "torso_left"  in indications && "floor_left" in indications ) -> text = "Full left obstacle"
+                    ( "torso_right"  in indications && "floor_right" in indications ) -> text = "Full right obstacle"
+                    ( "head" in indications && "torso_left" in indications) -> text = "Left torso and head obstacle"
+                    ( "head" in indications && "torso_right" in indications) -> text = "Right torso and head obstacle"
+                    ( "head" in indications && "floor_left" in indications) -> text = "Left floor and head obstacle"
+                    ( "head" in indications && "floor_right" in indications) -> text = "Right floor and head obstacle"
                 }
             }
             else {

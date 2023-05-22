@@ -339,7 +339,7 @@ class VibaRenderer(val activity: VibaActivity) :
                     val coordinates = pointsCoordinates.getCoordinatesByPointId(key)
                     val distance: Float=
                         coordinates?.let {
-                            getMillimetersDepth(depthImage, it.first, it.second).toFloat()
+                            getDistanceInMillimeters(depthImage, it.first, it.second).toFloat()
                         } ?: 0.0f
 
                     if ((distance > 0) && (distance <= pointsCoordinates.distanceThreshold)){
@@ -435,7 +435,7 @@ class VibaRenderer(val activity: VibaActivity) :
     //------------------------ Fabrizio -----------------------------
 
     /** Obtain the depth in millimeters for [depthImage] at coordinates ([x], [y]). **/
-    private fun getMillimetersDepth(depthImage: Image, x: Float, y: Float): Int {
+    private fun getDistanceInMillimeters(depthImage: Image, x: Float, y: Float): Int {
 
         // The depth image has a single plane, which stores depth for each
         // pixel as 16-bit unsigned integers.
