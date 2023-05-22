@@ -19,7 +19,7 @@
     android:id="@+id/my_layout"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    tools:context="com.google.ar.core.examples.java.helloar.HelloArActivity">
+    tools:context="com.google.ar.core.vibaplatform.java.helloar.HelloArActivity">
 
   <android.opengl.GLSurfaceView
       android:id="@+id/surfaceview"
