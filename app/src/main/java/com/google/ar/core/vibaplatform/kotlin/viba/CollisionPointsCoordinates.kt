@@ -1,4 +1,4 @@
-package com.google.ar.core.vibaplatform.kotlin.helloar
+package com.google.ar.core.vibaplatform.kotlin.viba
 
 // -------------------- fabrizio ---------------------------------
 class CollisionPointsCoordinates {

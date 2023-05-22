@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.google.ar.core.vibaplatform.kotlin.helloar
+package com.google.ar.core.vibaplatform.kotlin.viba
 
 import android.os.Bundle
 import android.util.Log
@@ -48,14 +48,14 @@ import java.util.Locale
  * ARCore API. The application will display any detected planes and will allow the user to tap on a
  * plane to place a 3D model.
  */
-class HelloArActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
+class VibaActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
     companion object {
-        private const val TAG = "HelloArActivity"
+        private const val TAG = "VibaActivity"
     }
 
     lateinit var arCoreSessionHelper: ARCoreSessionLifecycleHelper
-    lateinit var view: HelloArView
-    lateinit var renderer: HelloArRenderer
+    lateinit var view: VibaView
+    lateinit var renderer: VibaRenderer
 
     val depthSettings = DepthSettings()
     private val pointsCoordinates = CollisionPointsCoordinates()
@@ -120,11 +120,11 @@ class HelloArActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
         lifecycle.addObserver(arCoreSessionHelper)
 
         // Set up the Hello AR renderer.
-        renderer = HelloArRenderer(this)
+        renderer = VibaRenderer(this)
         lifecycle.addObserver(renderer)
 
         // Set up Hello AR UI.
-        view = HelloArView(this)
+        view = VibaView(this)
         lifecycle.addObserver(view)
         setContentView(view.root)
 

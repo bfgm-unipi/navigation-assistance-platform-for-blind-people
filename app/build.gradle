@@ -19,7 +19,7 @@ apply plugin: 'kotlin-android'
 android {
     compileSdkVersion 30
     defaultConfig {
-        applicationId "com.google.ar.core.vibaplatform.kotlin.helloar"
+        applicationId "com.google.ar.core.vibaplatform.kotlin.viba"
 
         // AR Optional apps must declare minSdkVersion >= 14.
         // AR Required apps must declare minSdkVersion >= 24.

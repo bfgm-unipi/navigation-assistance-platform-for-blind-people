@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.google.ar.core.vibaplatform.kotlin.helloar
+package com.google.ar.core.vibaplatform.kotlin.viba
 
 import android.content.res.Resources
 import android.opengl.GLSurfaceView
@@ -27,7 +27,7 @@ import com.google.ar.core.Config
 import com.google.ar.core.vibaplatform.java.common.helpers.SnackbarHelper
 
 /** Contains UI elements for Hello AR. */
-class HelloArView(val activity: HelloArActivity) : DefaultLifecycleObserver {
+class VibaView(val activity: VibaActivity) : DefaultLifecycleObserver {
     val root = View.inflate(activity, R.layout.activity_main, null)
     val surfaceView = root.findViewById<GLSurfaceView>(R.id.surfaceview)
     val settingsButton =

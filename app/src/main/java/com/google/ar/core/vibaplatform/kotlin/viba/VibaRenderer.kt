@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.google.ar.core.vibaplatform.kotlin.helloar
+package com.google.ar.core.vibaplatform.kotlin.viba
 
 import android.media.Image
 import android.opengl.GLES30
@@ -50,10 +50,10 @@ import kotlin.math.floor
 
 
 /** Renders the HelloAR application using our example Renderer. */
-class HelloArRenderer(val activity: HelloArActivity) :
+class VibaRenderer(val activity: VibaActivity) :
     SampleRender.Renderer, DefaultLifecycleObserver {
     companion object {
-        val TAG = "HelloArRenderer"
+        val TAG = "VibaRenderer"
 
         // See the definition of updateSphericalHarmonicsCoefficients for an explanation of these
         // constants.
