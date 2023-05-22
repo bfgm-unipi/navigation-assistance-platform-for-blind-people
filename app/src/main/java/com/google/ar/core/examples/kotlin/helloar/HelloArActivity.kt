@@ -268,13 +268,6 @@ class HelloArActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
         val screenWidth  = displayMetrics.widthPixels
         val screenHeight = displayMetrics.heightPixels
 
-        /*/ TEST: setup image size
-        setupProportionalImageSize(headImageView)
-        setupProportionalImageSize(leftChestImageView)
-        setupProportionalImageSize(rightChestImageView)
-        setupProportionalImageSize(leftLegImageView)
-        setupProportionalImageSize(rightLegImageView)*/
-
         // move the image views
         headImageView.post {
             headImageView.translationX = (screenWidth / 2.0f)  - (headImageView.width / 2.0f)
@@ -295,18 +288,6 @@ class HelloArActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
         rightChestImageView.visibility = ImageView.VISIBLE
         leftLegImageView.visibility  = ImageView.VISIBLE
         rightLegImageView.visibility = ImageView.VISIBLE
-    }
-
-    // TODO: fix proportional resize
-    private fun setupProportionalImageSize(imageView: ImageView) {
-        val parentLayout = findViewById<RelativeLayout>(R.id.my_layout)
-        val layoutParams = RelativeLayout.LayoutParams(
-            (parentLayout.width * 0.25).toInt(),
-            (parentLayout.height * 0.25).toInt()
-        )
-        layoutParams.addRule(RelativeLayout.ALIGN_PARENT_START)
-        layoutParams.addRule(RelativeLayout.ALIGN_PARENT_TOP)
-        imageView.layoutParams = layoutParams
     }
 
     fun updateUserImages(listOfCloseBodyParts: MutableList<String>) {
