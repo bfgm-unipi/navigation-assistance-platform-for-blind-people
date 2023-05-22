@@ -361,14 +361,14 @@ class VibaActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
 
     fun onThresholdUp() {
         val text: TextView = findViewById(R.id.threshold)
-        val threshold: Float = text.text.toString().toFloat() + 500
+        val threshold: Float = text.text.toString().toFloat() + 100
         text.text = threshold.toString()
         renderer.setThreshold(threshold)
     }
 
     fun onThresholdDown() {
         val text: TextView = findViewById(R.id.threshold)
-        val threshold: Float = text.text.toString().toFloat() - 500
+        val threshold: Float = text.text.toString().toFloat() - 100
         if (threshold > 0) {
             text.text = threshold.toString()
             renderer.setThreshold(threshold)
