@@ -153,18 +153,18 @@ class VibaActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
         val screenWidth = displayMetrics.widthPixels
         val screenHeight = displayMetrics.heightPixels
         val scale = displayMetrics.density
-        val pixelsToTranslate = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 55f, resources.displayMetrics)
+        val pixelsToTranslate = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 40f, resources.displayMetrics)
 
         for (key in pointsCoordinates.getKeys()) {
             val imageView = findViewById<ImageView>(resources.getIdentifier(key, "id", packageName))
-            imageView.translationX = pointsCoordinates.getCoordinatesByPointId(key)!!.first * screenWidth.toFloat()
-            imageView.translationY = pointsCoordinates.getCoordinatesByPointId(key)!!.second * screenHeight.toFloat()
+            imageView.translationX = pointsCoordinates.getCoordinatesByPointId(key)!!.first * screenWidth.toFloat() - (imageView.width / 2.0f)
+            imageView.translationY = pointsCoordinates.getCoordinatesByPointId(key)!!.second * screenHeight.toFloat() - (imageView.height / 2.0f)
             imageView.visibility = ImageView.VISIBLE
 
             val textView = findViewById<TextView>(resources.getIdentifier(key + "_distance", "id", packageName))
             textView.translationX = pointsCoordinates.getCoordinatesByPointId(key)!!.first * screenWidth.toFloat() - pixelsToTranslate/scale
             if (key == "h1") {
-                textView.translationY = pointsCoordinates.getCoordinatesByPointId(key)!!.second * screenHeight.toFloat() - pixelsToTranslate/scale
+                textView.translationY = pointsCoordinates.getCoordinatesByPointId(key)!!.second * screenHeight.toFloat() - (pixelsToTranslate/scale * 2.3f)
             } else {
                 textView.translationY = pointsCoordinates.getCoordinatesByPointId(key)!!.second * screenHeight.toFloat() + pixelsToTranslate/scale
             }
